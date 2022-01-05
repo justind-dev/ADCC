@@ -2,13 +2,16 @@ namespace ADCC
 {
     public partial class Form1 : Form
     {
-        ADM manager = new ADM("domainname.com");
+        readonly ADManager manager = new ADManager("domainname.com");
         public Form1()
         {
             InitializeComponent();
             
         }
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
+        }
         private void btn_unlock_userSAM_Click(object sender, EventArgs e)
         {
             if (textbox_userSAM.Text == "")
@@ -22,9 +25,18 @@ namespace ADCC
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void btn_FindUserDN_Click(object sender, EventArgs e)
         {
-
+            if (textBox_userDNFind.Text == "")
+            {
+                MessageBox.Show("Please enter the sAMAccountName for the user to find.");
+                return;
+            }
+            else
+            {
+                var userDistinguishedName = manager.GetDistinguishedName(textbox_userSAM.Text);
+                MessageBox.Show($"User DN is : {userDistinguishedName}");
+            }
         }
     }
 }

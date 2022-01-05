@@ -22,7 +22,7 @@ namespace ADCC
         //Unlock User Account
         public string Unlock(string userSAM)
         {
-            var userDn = getDistinguishedName(userSAM);
+            var userDn = GetDistinguishedName(userSAM);
 
             if (userDn == null)
             {
@@ -53,7 +53,7 @@ namespace ADCC
         }
 
         //Returns user distinguised name given SAMAccount name
-        private string getDistinguishedName(string userSAM)
+        public string GetDistinguishedName(string userSAM)
         {
             using (var pc = new PrincipalContext(ContextType.Domain, adname))
             {
