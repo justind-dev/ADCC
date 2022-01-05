@@ -60,7 +60,6 @@ namespace ADCC
         // Returns user distinguised name given SAMAccount name - Not really used currently but might be later...
         public string GetDistinguishedName(string userSAM, string domainName )
         {
-            string domain = domainName;
 
             if (domainName != "")
             {
@@ -76,7 +75,7 @@ namespace ADCC
                     return "User not found";
                 }
             }
-            else
+            else // use the default connected domain.
             {
                 using var pc = new PrincipalContext(ContextType.Domain, connectedDomain);
                 var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, userSAM);
