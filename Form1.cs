@@ -24,7 +24,7 @@ namespace ADCC
             }
             else
             {
-                MessageBox.Show(manager.Unlock(textbox_userSAM.Text, textBox_DomainName.Text.Trim()));
+                MessageBox.Show(manager.UnlockUser(textbox_userSAM.Text, textBox_DomainName.Text.Trim()));
             }
         }
 

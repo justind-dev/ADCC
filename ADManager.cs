@@ -28,37 +28,12 @@ namespace ADCC
         private string connectedDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
         public ADManager()
         {
-            
+
         }
-        //Unlock User Account
-        public string Unlock(string userName, string domainName)
-        {
-            //get the credential for the passed domain name
 
-            var cred = credManager.GetCredentialsByDomainController(domainName);
-
-            using var pc = new PrincipalContext(ContextType.Domain, domainName, cred.Item1, cred.Item2);
-            var user = UserPrincipal.FindByIdentity(pc, domainName + "\\" + userName);
-
-            if (user == null) { user.Dispose(); return "User account not found"; }
-            else
-            {
-                if (user.IsAccountLockedOut())
-                {
-                    user.UnlockAccount();
-                    user.Dispose();
-                    return userName + " is now unlocked.";
-                }
-                else
-                {
-                    user.Dispose();
-                    return userName + " is already unlocked";
-                }
-            }
-        }
 
         // Returns user distinguised name given SAMAccount name - Not really used currently but might be later...
-        public string GetDistinguishedName(string userSAM, string domainName )
+        public string GetDistinguishedName(string userSAM, string domainName)
         {
 
             if (domainName != "")
@@ -86,6 +61,53 @@ namespace ADCC
                 else
                 {
                     return "User not found";
+                }
+            }
+
+        }
+
+        public string UnlockUser(string userName, string domainName)
+        {
+
+            if (domainName != "") // if domain provided try to get credentials from credential manager for domain
+            {
+                var cred = credManager.GetCredentialsByDomainController(domainName);
+                using var pc = new PrincipalContext(ContextType.Domain, domainName, cred.Item1, cred.Item2);
+                var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, domainName.Split().First() + "\\" + userName);
+                if (user == null) { user.Dispose(); return "User account not found"; }
+                else
+                {
+                    if (user.IsAccountLockedOut())
+                    {
+                        user.UnlockAccount();
+                        user.Dispose();
+                        return userName + " is now unlocked.";
+                    }
+                    else
+                    {
+                        user.Dispose();
+                        return userName + " is already unlocked";
+                    }
+                }
+            }
+            else // if no domain provided use the default connected domain.
+            {
+                using var pc = new PrincipalContext(ContextType.Domain, connectedDomain);
+                var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, userName);
+                if (user == null) { user.Dispose(); return "User account not found"; }
+                else
+                {
+                    if (user.IsAccountLockedOut())
+                    {
+                        user.UnlockAccount();
+                        user.Dispose();
+                        return userName + " is now unlocked.";
+                    }
+                    else
+                    {
+                        user.Dispose();
+                        return userName + " is already unlocked";
+                    }
                 }
             }
 
