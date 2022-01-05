@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace ADCC
 {
-    public class ADM
+    public class ADManager
     {
         //This will be the class used to interact with Active Directory Services.
         //If you have multiple domains you will need to configure the domain controllers
         //in the seperate 
         public string adname;
-        public ADM(string domainName)
+        public ADManager(string domainName)
         {
             adname = domainName;
         }
@@ -32,14 +32,14 @@ namespace ADCC
             {
                 try
                 {
-                    DirectoryEntry uEntry = new DirectoryEntry(userDn);
+                    DirectoryEntry uEntry = new(userDn);
                     uEntry.Properties["LockOutTime"].Value = 0; //unlock account
 
                     uEntry.CommitChanges(); //may not be needed but adding it anyways
 
                     uEntry.Close();
 
-                    return uEntry.Name;
+                    return uEntry.Name.ToString();
                 }
 
                 catch (DirectoryServicesCOMException E)
@@ -55,17 +55,15 @@ namespace ADCC
         //Returns user distinguised name given SAMAccount name
         public string GetDistinguishedName(string userSAM)
         {
-            using (var pc = new PrincipalContext(ContextType.Domain, adname))
+            using var pc = new PrincipalContext(ContextType.Domain, adname);
+            var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, adname + "\\" + userSAM);
+            if (user != null)
             {
-                var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, adname + "\\" + userSAM);
-                if (user != null)
-                {
-                    return user.DistinguishedName;
-                }
-                else
-                {
-                    return null;
-                }
+                return user.DistinguishedName.ToString();
+            }
+            else
+            {
+                return null;
             }
         }
     }

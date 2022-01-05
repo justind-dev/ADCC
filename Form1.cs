@@ -2,7 +2,7 @@ namespace ADCC
 {
     public partial class Form1 : Form
     {
-        readonly ADManager manager = new ADManager("domainname.com");
+        readonly ADManager manager = new("domainname.com");
         public Form1()
         {
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace ADCC
             }
             else
             {
-                var userDistinguishedName = manager.GetDistinguishedName(textbox_userSAM.Text);
+                var userDistinguishedName = manager.GetDistinguishedName(textBox_userDNFind.Text);
                 MessageBox.Show($"User DN is : {userDistinguishedName}");
             }
         }
