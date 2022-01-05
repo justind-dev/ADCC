@@ -26,18 +26,19 @@ namespace ADCC
             var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, domainname + "\\" + userSAM);
 
             if (user == null) return "User account not found";
-
-            if (user.IsAccountLockedOut())
-            {
-                user.UnlockAccount();
-                return userSAM + " is no unlocked.";
-
-            }
             else
             {
-                return userSAM + " is already unlocked";
-            }
+                if (user.IsAccountLockedOut())
+                {
+                    user.UnlockAccount();
+                    return userSAM + " is now unlocked.";
 
+                }
+                else
+                {
+                    return userSAM + " is already unlocked";
+                }
+            }
         }
 
         //Returns user distinguised name given SAMAccount name
