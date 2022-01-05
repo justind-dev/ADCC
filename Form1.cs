@@ -1,8 +1,11 @@
+using System;
+using System.Net;
+using System.Net.NetworkInformation;
 namespace ADCC
 {
     public partial class Form1 : Form
     {
-        readonly ADManager manager = new("yourdomain.com");
+        readonly ADManager manager = new();
         public Form1()
         {
             InitializeComponent();
@@ -21,7 +24,7 @@ namespace ADCC
             }
             else
             {
-                MessageBox.Show(manager.Unlock(textbox_userSAM.Text));
+                MessageBox.Show(manager.Unlock(textbox_userSAM.Text, textBox_DomainName.Text.Trim()));
             }
         }
 
@@ -34,9 +37,19 @@ namespace ADCC
             }
             else
             {
-                var userDistinguishedName = manager.GetDistinguishedName(textBox_userDNFind.Text);
-                MessageBox.Show($"User DN is : {userDistinguishedName}");
+                if (textBox_DomainName.Text == "")
+                {
+                    var userDistinguishedName = manager.GetDistinguishedName(textBox_userDNFind.Text.Trim(), "");
+                    MessageBox.Show($"User DN is : {userDistinguishedName}");
+                }
+                else
+                {
+                    var userDistinguishedName = manager.GetDistinguishedName(textBox_userDNFind.Text.Trim(), 
+                                                                             textBox_DomainName.Text.Trim());
+                    MessageBox.Show($"User DN is : {userDistinguishedName}");
+                }
             }
         }
+
     }
 }
