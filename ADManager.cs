@@ -13,17 +13,17 @@ namespace ADCC
     {
         //This will be the class used to interact with Active Directory Services.
 
-        public string domainname;
-        public ADManager(string domainName)
+        public string domainName;
+        public ADManager(string DomainName)
         {
-            domainname = domainName;
+            domainName = DomainName;
         }
         //Unlock User Account
-        public string Unlock(string userSAM)
+        public string Unlock(string userName)
         {
 
-            using var pc = new PrincipalContext(ContextType.Domain, domainname);
-            var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, domainname + "\\" + userSAM);
+            using var pc = new PrincipalContext(ContextType.Domain, domainName);
+            var user = UserPrincipal.FindByIdentity(pc, domainName + "\\" + userName);
 
             if (user == null) return "User account not found";
             else
@@ -31,12 +31,11 @@ namespace ADCC
                 if (user.IsAccountLockedOut())
                 {
                     user.UnlockAccount();
-                    return userSAM + " is now unlocked.";
-
+                    return userName + " is now unlocked.";
                 }
                 else
                 {
-                    return userSAM + " is already unlocked";
+                    return userName + " is already unlocked";
                 }
             }
         }
@@ -44,8 +43,8 @@ namespace ADCC
         //Returns user distinguised name given SAMAccount name
         public string GetDistinguishedName(string userSAM)
         {
-            using var pc = new PrincipalContext(ContextType.Domain, domainname);
-            var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, domainname + "\\" + userSAM);
+            using var pc = new PrincipalContext(ContextType.Domain, domainName);
+            var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, domainName + "\\" + userSAM);
             if (user != null)
             {
                 return user.DistinguishedName.ToString();
