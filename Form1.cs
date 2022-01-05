@@ -2,11 +2,11 @@ namespace ADCC
 {
     public partial class Form1 : Form
     {
-        readonly ADManager manager = new("domainname.com");
+        readonly ADManager manager = new("yourdomain.com");
         public Form1()
         {
             InitializeComponent();
-            
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -21,7 +21,7 @@ namespace ADCC
             }
             else
             {
-                manager.Unlock(textbox_userSAM.Text);
+                MessageBox.Show(manager.Unlock(textbox_userSAM.Text));
             }
         }
 

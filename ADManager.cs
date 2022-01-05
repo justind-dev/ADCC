@@ -12,51 +12,39 @@ namespace ADCC
     public class ADManager
     {
         //This will be the class used to interact with Active Directory Services.
-        //If you have multiple domains you will need to configure the domain controllers
-        //in the seperate 
-        public string adname;
+
+        public string domainname;
         public ADManager(string domainName)
         {
-            adname = domainName;
+            domainname = domainName;
         }
         //Unlock User Account
         public string Unlock(string userSAM)
         {
-            var userDn = GetDistinguishedName(userSAM);
 
-            if (userDn == null)
+            using var pc = new PrincipalContext(ContextType.Domain, domainname);
+            var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, domainname + "\\" + userSAM);
+
+            if (user == null) return "User account not found";
+
+            if (user.IsAccountLockedOut())
             {
-                return "Could not find user.";
+                user.UnlockAccount();
+                return userSAM + " is no unlocked.";
+
             }
             else
             {
-                try
-                {
-                    DirectoryEntry uEntry = new(userDn);
-                    uEntry.Properties["LockOutTime"].Value = 0; //unlock account
-
-                    uEntry.CommitChanges(); //may not be needed but adding it anyways
-
-                    uEntry.Close();
-
-                    return uEntry.Name.ToString();
-                }
-
-                catch (DirectoryServicesCOMException E)
-                {
-                    //DoSomethingWith --> E.Message.ToString();
-                    return E.Message;
-                }
+                return userSAM + " is already unlocked";
             }
-
 
         }
 
         //Returns user distinguised name given SAMAccount name
         public string GetDistinguishedName(string userSAM)
         {
-            using var pc = new PrincipalContext(ContextType.Domain, adname);
-            var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, adname + "\\" + userSAM);
+            using var pc = new PrincipalContext(ContextType.Domain, domainname);
+            var user = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, domainname + "\\" + userSAM);
             if (user != null)
             {
                 return user.DistinguishedName.ToString();
