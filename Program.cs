@@ -1,3 +1,4 @@
+
 namespace ADCC
 {
     internal static class Program
@@ -6,9 +7,11 @@ namespace ADCC
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
+
         static void Main()
         {
-            Application.Run(new Form1());
+
+        Application.Run(new Form1());
         }
     }
 }
