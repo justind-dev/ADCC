@@ -90,7 +90,7 @@
             // label_domainContext
             // 
             this.label_domainContext.AutoSize = true;
-            this.label_domainContext.Location = new System.Drawing.Point(449, 12);
+            this.label_domainContext.Location = new System.Drawing.Point(449, 15);
             this.label_domainContext.Name = "label_domainContext";
             this.label_domainContext.Size = new System.Drawing.Size(49, 15);
             this.label_domainContext.TabIndex = 8;
@@ -107,12 +107,13 @@
             // 
             // MainTabControl
             // 
+            this.MainTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.MainTabControl.Controls.Add(this.TabUsers);
             this.MainTabControl.Controls.Add(this.TabComputers);
-            this.MainTabControl.Location = new System.Drawing.Point(12, 30);
+            this.MainTabControl.Location = new System.Drawing.Point(0, 37);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(613, 388);
+            this.MainTabControl.Size = new System.Drawing.Size(637, 430);
             this.MainTabControl.TabIndex = 11;
             // 
             // TabUsers
@@ -124,7 +125,7 @@
             this.TabUsers.Location = new System.Drawing.Point(4, 24);
             this.TabUsers.Name = "TabUsers";
             this.TabUsers.Padding = new System.Windows.Forms.Padding(3);
-            this.TabUsers.Size = new System.Drawing.Size(605, 360);
+            this.TabUsers.Size = new System.Drawing.Size(629, 402);
             this.TabUsers.TabIndex = 0;
             this.TabUsers.Text = "Users";
             this.TabUsers.UseVisualStyleBackColor = true;
@@ -134,7 +135,7 @@
             this.TabComputers.Location = new System.Drawing.Point(4, 24);
             this.TabComputers.Name = "TabComputers";
             this.TabComputers.Padding = new System.Windows.Forms.Padding(3);
-            this.TabComputers.Size = new System.Drawing.Size(605, 360);
+            this.TabComputers.Size = new System.Drawing.Size(629, 402);
             this.TabComputers.TabIndex = 1;
             this.TabComputers.Text = "Computers";
             this.TabComputers.UseVisualStyleBackColor = true;
@@ -143,12 +144,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(637, 430);
+            this.ClientSize = new System.Drawing.Size(639, 467);
             this.Controls.Add(this.MainTabControl);
-            this.Controls.Add(this.ComboBox1);
             this.Controls.Add(this.label_domainContext);
+            this.Controls.Add(this.ComboBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ActiveDirectory Command Center";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MainTabControl.ResumeLayout(false);
