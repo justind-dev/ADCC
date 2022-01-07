@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -45,11 +44,10 @@
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.textbox_userSAM = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.MainTabControl = new System.Windows.Forms.TabControl();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.toolStrip_Devices = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.MainTabControl = new System.Windows.Forms.TabControl();
             this.TabUsers.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -152,11 +150,10 @@
             this.toolStripButton1,
             this.toolStripLabel3,
             this.toolStrip_Devices,
-            this.toolStripButton2,
-            this.toolStripButton3});
+            this.toolStripButton2});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(534, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(511, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -191,17 +188,6 @@
             this.toolStripButton1.Text = "toolStripButton1";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
-            // MainTabControl
-            // 
-            this.MainTabControl.ContextMenuStrip = this.contextMenuStrip1;
-            this.MainTabControl.Controls.Add(this.TabUsers);
-            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainTabControl.Location = new System.Drawing.Point(0, 0);
-            this.MainTabControl.Name = "MainTabControl";
-            this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(884, 601);
-            this.MainTabControl.TabIndex = 11;
-            // 
             // toolStripLabel3
             // 
             this.toolStripLabel3.Name = "toolStripLabel3";
@@ -222,14 +208,16 @@
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton2.Text = "toolStripButton2";
             // 
-            // toolStripButton3
+            // MainTabControl
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
+            this.MainTabControl.ContextMenuStrip = this.contextMenuStrip1;
+            this.MainTabControl.Controls.Add(this.TabUsers);
+            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainTabControl.Location = new System.Drawing.Point(0, 0);
+            this.MainTabControl.Name = "MainTabControl";
+            this.MainTabControl.SelectedIndex = 0;
+            this.MainTabControl.Size = new System.Drawing.Size(884, 601);
+            this.MainTabControl.TabIndex = 11;
             // 
             // Form1
             // 
@@ -277,6 +265,5 @@
         private ToolStripLabel toolStripLabel3;
         private ToolStripTextBox toolStrip_Devices;
         private ToolStripButton toolStripButton2;
-        private ToolStripButton toolStripButton3;
     }
 }
