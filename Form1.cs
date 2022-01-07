@@ -1,5 +1,3 @@
-using System;
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
@@ -9,7 +7,7 @@ namespace ADCC;
 
 public partial class Form1 : Form
 {
-    private readonly string connectedDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
+    private readonly string localComputerDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
     private string currentDomainContextName;
     private ActiveDirectoryManager manager;
     private PrincipalContext context;
@@ -21,7 +19,7 @@ public partial class Form1 : Form
 
     private void Form1_Load(object sender, EventArgs e)
     {
-        currentDomainContextName = connectedDomain.ToString();
+        currentDomainContextName = localComputerDomain;
         GetDomainsFromSettings();
     }
 
@@ -72,7 +70,7 @@ public partial class Form1 : Form
         }
 
         currentDomainContextName = ComboBox1.Text.ToLower().Trim();
-        if (currentDomainContextName == connectedDomain)
+        if (currentDomainContextName == localComputerDomain)
         {
             context = new PrincipalContext(ContextType.Domain, currentDomainContextName);
             manager.SetContext(context);
@@ -98,14 +96,14 @@ public partial class Form1 : Form
     private void GetDomainsFromSettings()
     {
         ComboBox1.Items.Clear();
-        ComboBox1.Items.Add(connectedDomain.Trim());
+        ComboBox1.Items.Add(localComputerDomain.Trim());
         foreach (var domain in ConfigurationManager.AppSettings["domains"].Split(","))
         {
             ComboBox1.Items.Add(domain);
         }
 
         ComboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
-        currentDomainContextName = connectedDomain;
+        currentDomainContextName = localComputerDomain;
         
         var context = new PrincipalContext(ContextType.Domain, currentDomainContextName);
         manager = new ActiveDirectoryManager(context);
