@@ -11,7 +11,7 @@ namespace ADCC
     {
         private readonly string connectedDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
         private string currentDomainContextName;
-        public ActiveDirectoryManager manager;
+        private ActiveDirectoryManager manager;
         private PrincipalContext adcontext;
         public Form1()
         {
