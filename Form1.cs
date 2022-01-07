@@ -13,19 +13,26 @@ namespace ADCC
         private string currentDomainContextName;
         private ActiveDirectoryManager manager;
         private PrincipalContext adcontext;
+
         public Form1()
         {
             InitializeComponent();
-
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             currentDomainContextName = connectedDomain.ToString();
             GetDomainsFromSettings();
         }
+
         private void btn_unlock_userSAM_Click(object sender, EventArgs e)
         {
-            if (currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
+            if (currentDomainContextName == null)
+            {
+                MessageBox.Show("Please select a domain.");
+                return;
+            }
+
             if (textbox_userSAM.Text == "")
             {
                 MessageBox.Show("Please enter the sAMAccountName for the user to unlock them.");
@@ -38,15 +45,21 @@ namespace ADCC
                 {
                     MessageBox.Show($"User {textbox_userSAM.Text} unlocked.");
                 }
-                else { MessageBox.Show($"User {textbox_userSAM.Text} already unlocked or does not exist."); }
-
-
+                else
+                {
+                    MessageBox.Show($"User {textbox_userSAM.Text} already unlocked or does not exist.");
+                }
             }
         }
 
         private void btn_FindUserDN_Click(object sender, EventArgs e)
         {
-            if (currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
+            if (currentDomainContextName == null)
+            {
+                MessageBox.Show("Please select a domain.");
+                return;
+            }
+
             if (textBox_userDNFind.Text == "")
             {
                 MessageBox.Show("Please enter the sAMAccountName for the user to find.");
@@ -62,7 +75,11 @@ namespace ADCC
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComboBox1.Text == null) { return; }
+            if (ComboBox1.Text == null)
+            {
+                return;
+            }
+
             currentDomainContextName = ComboBox1.Text.ToString().ToLower().Trim();
             if (currentDomainContextName == connectedDomain)
             {
@@ -74,7 +91,8 @@ namespace ADCC
                 var cred = GetCredentialsByDomainController(currentDomainContextName);
                 if (cred != null)
                 {
-                    adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName, cred.Item1, cred.Item2);
+                    adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName, cred.Item1,
+                        cred.Item2);
                     manager.SetContext(adcontext);
                 }
                 else
@@ -93,14 +111,13 @@ namespace ADCC
             foreach (string domain in ConfigurationManager.AppSettings["domains"].Split(","))
             {
                 ComboBox1.Items.Add(domain);
-
             }
+
             ComboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
             currentDomainContextName = connectedDomain.ToString();
             var adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName);
             manager = new ActiveDirectoryManager(adcontext);
             ComboBox1.Text = currentDomainContextName;
-
         }
 
         public Tuple<string, string> GetCredentialsByDomainController(string DomainName)
@@ -117,6 +134,5 @@ namespace ADCC
                 return null;
             }
         }
-
     }
 }
