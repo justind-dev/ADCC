@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -45,6 +46,11 @@
             this.textbox_userSAM = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.MainTabControl = new System.Windows.Forms.TabControl();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStrip_Devices = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
             this.TabUsers.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -52,6 +58,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.user_DataGridView1)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.MainTabControl.SuspendLayout();
+            this.toolStripContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -112,6 +119,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.ContextMenuStrip = this.contextMenuStrip1;
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.toolStripContainer2);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.user_DataGridView1);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(876, 548);
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -144,10 +152,14 @@
             this.toolStripComboBox1,
             this.toolStripLabel2,
             this.textbox_userSAM,
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripLabel3,
+            this.toolStrip_Devices,
+            this.toolStripButton2,
+            this.toolStripButton3});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(339, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(534, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -193,6 +205,47 @@
             this.MainTabControl.Size = new System.Drawing.Size(884, 601);
             this.MainTabControl.TabIndex = 11;
             // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(47, 22);
+            this.toolStripLabel3.Text = "Devices";
+            // 
+            // toolStrip_Devices
+            // 
+            this.toolStrip_Devices.Name = "toolStrip_Devices";
+            this.toolStrip_Devices.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::ADCC.Properties.Resources.magnifier;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "toolStripButton2";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Text = "toolStripButton3";
+            // 
+            // toolStripContainer2
+            // 
+            // 
+            // toolStripContainer2.ContentPanel
+            // 
+            this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(150, 150);
+            this.toolStripContainer2.Location = new System.Drawing.Point(8, 8);
+            this.toolStripContainer2.Name = "toolStripContainer2";
+            this.toolStripContainer2.Size = new System.Drawing.Size(150, 175);
+            this.toolStripContainer2.TabIndex = 1;
+            this.toolStripContainer2.Text = "toolStripContainer2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -215,6 +268,8 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.MainTabControl.ResumeLayout(false);
+            this.toolStripContainer2.ResumeLayout(false);
+            this.toolStripContainer2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -236,5 +291,10 @@
         private ToolStripTextBox textbox_userSAM;
         private ToolStripButton toolStripButton1;
         private TabControl MainTabControl;
+        private ToolStripContainer toolStripContainer2;
+        private ToolStripLabel toolStripLabel3;
+        private ToolStripTextBox toolStrip_Devices;
+        private ToolStripButton toolStripButton2;
+        private ToolStripButton toolStripButton3;
     }
 }
