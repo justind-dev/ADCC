@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.textbox_userSAM = new System.Windows.Forms.TextBox();
             this.btn_unlock_userSAM = new System.Windows.Forms.Button();
-            this.textBox_userDNFind = new System.Windows.Forms.TextBox();
+            this.textBoxUserDnFind = new System.Windows.Forms.TextBox();
             this.btn_FindUserDN = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.label_domainContext = new System.Windows.Forms.Label();
@@ -61,15 +61,15 @@
             this.btn_unlock_userSAM.TabIndex = 2;
             this.btn_unlock_userSAM.Text = "Unlock";
             this.btn_unlock_userSAM.UseVisualStyleBackColor = true;
-            this.btn_unlock_userSAM.Click += new System.EventHandler(this.btn_unlock_userSAM_Click);
+            this.btn_unlock_userSAM.Click += new System.EventHandler(this.ButtonUnlockUser);
             // 
             // textBox_userDNFind
             // 
-            this.textBox_userDNFind.Location = new System.Drawing.Point(113, 62);
-            this.textBox_userDNFind.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBox_userDNFind.Name = "textBox_userDNFind";
-            this.textBox_userDNFind.Size = new System.Drawing.Size(116, 23);
-            this.textBox_userDNFind.TabIndex = 3;
+            this.textBoxUserDnFind.Location = new System.Drawing.Point(113, 62);
+            this.textBoxUserDnFind.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxUserDnFind.Name = "textBoxUserDnFind";
+            this.textBoxUserDnFind.Size = new System.Drawing.Size(116, 23);
+            this.textBoxUserDnFind.TabIndex = 3;
             // 
             // btn_FindUserDN
             // 
@@ -80,7 +80,7 @@
             this.btn_FindUserDN.TabIndex = 4;
             this.btn_FindUserDN.Text = "Find DN";
             this.btn_FindUserDN.UseVisualStyleBackColor = true;
-            this.btn_FindUserDN.Click += new System.EventHandler(this.btn_FindUserDN_Click);
+            this.btn_FindUserDN.Click += new System.EventHandler(this.ButtonFindUserDn);
             // 
             // contextMenuStrip1
             // 
@@ -121,7 +121,7 @@
             this.TabUsers.Controls.Add(this.btn_unlock_userSAM);
             this.TabUsers.Controls.Add(this.textbox_userSAM);
             this.TabUsers.Controls.Add(this.btn_FindUserDN);
-            this.TabUsers.Controls.Add(this.textBox_userDNFind);
+            this.TabUsers.Controls.Add(this.textBoxUserDnFind);
             this.TabUsers.Location = new System.Drawing.Point(4, 24);
             this.TabUsers.Name = "TabUsers";
             this.TabUsers.Padding = new System.Windows.Forms.Padding(3);
@@ -166,7 +166,7 @@
         #endregion
         private TextBox textbox_userSAM;
         private Button btn_unlock_userSAM;
-        private TextBox textBox_userDNFind;
+        private TextBox textBoxUserDnFind;
         private Button btn_FindUserDN;
         private ContextMenuStrip contextMenuStrip1;
         private Label label_domainContext;
