@@ -131,8 +131,8 @@ namespace ADCC
             else
             {
                 _manager.SetContext(_adcontext);
-                _manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
-                var userData = _manager.GetUserData();
+                _manager.SetObjectOfInterestSearchTerm(textbox_userSAM.Text);
+                var userData = _manager.QueryDirectory();
                 var source = new BindingSource(userData, null);
                 user_DataGridView1.DataSource = source;
             }

@@ -6,56 +6,66 @@ namespace ADCC;
 public class ActiveDirectoryManager
 {
     private PrincipalContext? _currentContext;
-    private UserPrincipal? _userOfInterest;
+    private UserPrincipal? _objectOfInterest;
+    private string? _objectName;
 
     public ActiveDirectoryManager(PrincipalContext context)
     {
         _currentContext = context;
-        _userOfInterest = null;
+        _objectOfInterest = null;
     }
-
-    public void SetUserOfInterestByIdentity(string searchCriteria)
+    //set current user of interest by idenitity
+    public void SetUserOfInterestByIdentity(string identityName)
     {
-        _userOfInterest?.Dispose();
-        _userOfInterest = UserPrincipal.FindByIdentity(_currentContext, searchCriteria);
+        _objectName = identityName;
+        _objectOfInterest?.Dispose();
+        _objectOfInterest = UserPrincipal.FindByIdentity(_currentContext, identityName);
     }
-
+    // Set search term for query methods
+    public void SetObjectOfInterestSearchTerm(string searchCriteria)
+    {
+        _objectName = searchCriteria;
+    }
     public bool UnlockUser()
     {
-        if (_userOfInterest == null || !_userOfInterest.IsAccountLockedOut()) return false;
-        _userOfInterest.UnlockAccount();
+        if (_objectOfInterest == null || !_objectOfInterest.IsAccountLockedOut()) return false;
+        _objectOfInterest.UnlockAccount();
         return true;
     }
-
     public bool SetPassword(string password)
     {
-        _userOfInterest?.SetPassword(password);
+        _objectOfInterest?.SetPassword(password);
         return true;
     }
 
     public string? GetDistinguishedName()
     {
-        return _userOfInterest?.DistinguishedName;
+        return _objectOfInterest?.DistinguishedName;
     }
 
-    public BindingList<User> GetUserData()
+    // Search active directory, returning a list of matching users.
+    public BindingList<User> QueryDirectory()
     {
-        if (_userOfInterest == null) { return null; }
-        else
-        {
-            var userList = new List<User>
-            {
-                new User(_userOfInterest.SamAccountName,
-                                _userOfInterest.Name,
-                                _userOfInterest.Surname,
-                                _userOfInterest.IsAccountLockedOut() ? "True" : "False",
-                                _userOfInterest.DistinguishedName)
-            };
+        var userMatches = new BindingList<User>();
+        var searchString = String.Format("*{0}*", _objectName);
+        var searchMaskDisplayname = new UserPrincipal(_currentContext) { DisplayName = searchString };
+        var searchMaskUsername = new UserPrincipal(_currentContext) { SamAccountName = searchString };
+        var searcherDisplayname = new PrincipalSearcher(searchMaskDisplayname);
+        var searcherUsername = new PrincipalSearcher(searchMaskUsername);
+        PrincipalSearchResult<Principal> taskDisplayName = searcherDisplayname.FindAll();
+        PrincipalSearchResult<Principal> taskUsername = searcherUsername.FindAll();
+        var allMatches = taskDisplayName.Union(taskUsername);
 
-            var userData = new BindingList<User>(userList);
-            return userData;
-        }
+        foreach (UserPrincipal userPrincipal in allMatches)
+            using (userPrincipal)
+            {
+                userMatches.Add(new User(userPrincipal.SamAccountName, userPrincipal.Name, userPrincipal.Surname, userPrincipal.IsAccountLockedOut()? "True" : "False", userPrincipal.DistinguishedName));
+            }
+        userMatches = new BindingList<User>(userMatches.Distinct().ToList());
+        return userMatches;
     }
+
+
     public void SetContext(PrincipalContext context)
     {
         // _currentContext?.Dispose(); There was issues with accessing things after being disposed. Needs testing.
@@ -64,6 +74,6 @@ public class ActiveDirectoryManager
 
         // _userOfInterest?.Dispose(); There was issues with accessing things after being disposed. Needs testing.
 
-        _userOfInterest = null;
+        _objectOfInterest = null;
     }
 }

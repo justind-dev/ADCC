@@ -14,7 +14,7 @@ namespace ADCC
         public string LockedOut { get; set; }
         public string DistinguishedName { get; set; }
 
-        public User(string samAccountName, string name, string surname, string lockedOut, string distinguishedName)
+        public  User(string samAccountName, string name, string surname, string lockedOut, string distinguishedName)
         {
             SamAccountName = samAccountName;
             Name = name;
