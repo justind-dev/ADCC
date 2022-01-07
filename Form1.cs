@@ -10,7 +10,7 @@ namespace ADCC
     public partial class Form1 : Form
     {
         private readonly string connectedDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
-        private string currentDomainContext;
+        private string currentDomainContextName;
         public ActiveDirectoryManager manager;
         private PrincipalContext adcontext;
         public Form1()
@@ -20,12 +20,12 @@ namespace ADCC
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            currentDomainContext = connectedDomain.ToString();
+            currentDomainContextName = connectedDomain.ToString();
             GetDomainsFromSettings();
         }
         private void btn_unlock_userSAM_Click(object sender, EventArgs e)
         {
-            if (currentDomainContext == null) { MessageBox.Show("Please select a domain."); return; }
+            if (currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
             if (textbox_userSAM.Text == "")
             {
                 MessageBox.Show("Please enter the sAMAccountName for the user to unlock them.");
@@ -46,7 +46,7 @@ namespace ADCC
 
         private void btn_FindUserDN_Click(object sender, EventArgs e)
         {
-            if (currentDomainContext == null) { MessageBox.Show("Please select a domain."); return; }
+            if (currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
             if (textBox_userDNFind.Text == "")
             {
                 MessageBox.Show("Please enter the sAMAccountName for the user to find.");
@@ -63,17 +63,26 @@ namespace ADCC
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ComboBox1.Text == null) { return; }
-            currentDomainContext = ComboBox1.Text.ToString().ToLower().Trim();
-            if (currentDomainContext == connectedDomain)
+            currentDomainContextName = ComboBox1.Text.ToString().ToLower().Trim();
+            if (currentDomainContextName == connectedDomain)
             {
-                adcontext = new PrincipalContext(ContextType.Domain, currentDomainContext);
+                adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName);
                 manager.SetContext(adcontext);
             }
             else
             {
-                var cred = GetCredentialsByDomainController(currentDomainContext);
-                adcontext = new PrincipalContext(ContextType.Domain, currentDomainContext, cred.Item1, cred.Item2);
-                manager.SetContext(adcontext);
+                var cred = GetCredentialsByDomainController(currentDomainContextName);
+                if (cred != null)
+                {
+                    adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName, cred.Item1, cred.Item2);
+                    manager.SetContext(adcontext);
+                }
+                else
+                {
+                    MessageBox.Show("There was an error fetching credentials for the selected domain.\n" +
+                                    "Please be sure that you have specified those using the Windows Credential Manager");
+                    ComboBox1.SelectedIndex = 0;
+                }
             }
         }
 
@@ -87,10 +96,10 @@ namespace ADCC
 
             }
             ComboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
-            currentDomainContext = connectedDomain.ToString();
-            var adcontext = new PrincipalContext(ContextType.Domain, currentDomainContext);
+            currentDomainContextName = connectedDomain.ToString();
+            var adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName);
             manager = new ActiveDirectoryManager(adcontext);
-            ComboBox1.Text = currentDomainContext;
+            ComboBox1.Text = currentDomainContextName;
 
         }
 

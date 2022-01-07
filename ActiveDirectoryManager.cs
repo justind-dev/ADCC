@@ -25,6 +25,7 @@ namespace ADCC
         {
             if (_userOfInterest == null || !_userOfInterest.IsAccountLockedOut()) return false;
             _userOfInterest.UnlockAccount();
+            _userOfInterest.Dispose();
             return true;
         }
         public bool SetPassword(string password)
@@ -46,7 +47,15 @@ namespace ADCC
         public void SetContext(PrincipalContext context)
         {
             _currentContext = context;
-            _userOfInterest = null;
+            if (_userOfInterest != null)
+            {
+                _userOfInterest.Dispose();
+                _userOfInterest = null;
+            }
+            else
+            {
+                _userOfInterest = null;
+            }
         }
     }
 }
