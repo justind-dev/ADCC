@@ -19,20 +19,19 @@ namespace ADCC
         }
         public void SetUserOfInterestByIdentity(string searchCriteria)
         {
+            if (_userOfInterest != null) { _userOfInterest.Dispose(); }
             _userOfInterest = UserPrincipal.FindByIdentity(_currentContext, searchCriteria);
         }
         public bool UnlockUser()
         {
             if (_userOfInterest == null || !_userOfInterest.IsAccountLockedOut()) return false;
             _userOfInterest.UnlockAccount();
-            _userOfInterest.Dispose();
             return true;
         }
         public bool SetPassword(string password)
         {
             if (_userOfInterest == null) return false;
             _userOfInterest.SetPassword(password);
-            _userOfInterest.Dispose();
             return true;
         }
 
@@ -40,22 +39,17 @@ namespace ADCC
         {
             if (_userOfInterest == null) return null;
             string distinguishedName = _userOfInterest.DistinguishedName;
-            _userOfInterest.Dispose();
             return distinguishedName;
 
         }
         public void SetContext(PrincipalContext context)
         {
+            if (_currentContext != null) { _currentContext.Dispose(); }
             _currentContext = context;
-            if (_userOfInterest != null)
-            {
-                _userOfInterest.Dispose();
-                _userOfInterest = null;
-            }
-            else
-            {
-                _userOfInterest = null;
-            }
+
+            if (_userOfInterest != null) { _userOfInterest.Dispose(); }
+            _userOfInterest = null;
         }
     }
 }
+    
