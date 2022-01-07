@@ -7,10 +7,10 @@ namespace ADCC;
 
 public partial class Form1 : Form
 {
-    private readonly string localComputerDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
-    private string currentDomainContextName;
-    private ActiveDirectoryManager manager;
-    private PrincipalContext context;
+    private readonly string _localComputerDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
+    private string _currentDomainContextName;
+    private ActiveDirectoryManager _manager;
+    private PrincipalContext _context;
 
     public Form1()
     {
@@ -19,13 +19,13 @@ public partial class Form1 : Form
 
     private void Form1_Load(object sender, EventArgs e)
     {
-        currentDomainContextName = localComputerDomain;
+        _currentDomainContextName = _localComputerDomain;
         GetDomainsFromSettings();
     }
 
     private void ButtonUnlockUser(object sender, EventArgs e)
     {
-        if (currentDomainContextName == null)
+        if (_currentDomainContextName == null)
         {
             MessageBox.Show("Please select a domain.");
             return;
@@ -37,15 +37,15 @@ public partial class Form1 : Form
             return;
         }
 
-        manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
-        MessageBox.Show(manager.UnlockUser()
+        _manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
+        MessageBox.Show(_manager.UnlockUser()
             ? $"User {textbox_userSAM.Text} unlocked."
             : $"User {textbox_userSAM.Text} already unlocked or does not exist.");
     }
 
     private void ButtonFindUserDn(object sender, EventArgs e)
     {
-        if (currentDomainContextName == null)
+        if (_currentDomainContextName == null)
         {
             MessageBox.Show("Please select a domain.");
             return;
@@ -57,32 +57,29 @@ public partial class Form1 : Form
             return;
         }
 
-        manager.SetUserOfInterestByIdentity(textBoxUserDnFind.Text);
-        var userDistinguishedName = manager.GetDistinguishedName();
+        _manager.SetUserOfInterestByIdentity(textBoxUserDnFind.Text);
+        var userDistinguishedName = _manager.GetDistinguishedName();
         MessageBox.Show($"User DN is : {userDistinguishedName}");
     }
 
     private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (ComboBox1.Text == null)
+        if (ComboBox1.Text == null) return;
+        _currentDomainContextName = ComboBox1.Text.ToLower().Trim();
+        
+        if (_currentDomainContextName == _localComputerDomain)
         {
-            return;
-        }
-
-        currentDomainContextName = ComboBox1.Text.ToLower().Trim();
-        if (currentDomainContextName == localComputerDomain)
-        {
-            context = new PrincipalContext(ContextType.Domain, currentDomainContextName);
-            manager.SetContext(context);
+            _context = new PrincipalContext(ContextType.Domain, _currentDomainContextName);
+            _manager.SetContext(_context);
         }
         else
         {
-            var cred = GetCredentialsByDomainController(currentDomainContextName);
+            var cred = GetCredentialsByDomainController(_currentDomainContextName);
             if (cred != null)
             {
-                context = new PrincipalContext(ContextType.Domain, currentDomainContextName, cred.Item1,
+                _context = new PrincipalContext(ContextType.Domain, _currentDomainContextName, cred.Item1,
                     cred.Item2);
-                manager.SetContext(context);
+                _manager.SetContext(_context);
             }
             else
             {
@@ -96,18 +93,18 @@ public partial class Form1 : Form
     private void GetDomainsFromSettings()
     {
         ComboBox1.Items.Clear();
-        ComboBox1.Items.Add(localComputerDomain.Trim());
+        ComboBox1.Items.Add(_localComputerDomain.Trim());
         foreach (var domain in ConfigurationManager.AppSettings["domains"].Split(","))
         {
             ComboBox1.Items.Add(domain);
         }
 
         ComboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
-        currentDomainContextName = localComputerDomain;
+        _currentDomainContextName = _localComputerDomain;
         
-        var context = new PrincipalContext(ContextType.Domain, currentDomainContextName);
-        manager = new ActiveDirectoryManager(context);
-        ComboBox1.Text = currentDomainContextName;
+        var context = new PrincipalContext(ContextType.Domain, _currentDomainContextName);
+        _manager = new ActiveDirectoryManager(context);
+        ComboBox1.Text = _currentDomainContextName;
     }
 
     private static Tuple<string, string> GetCredentialsByDomainController(string DomainName)
