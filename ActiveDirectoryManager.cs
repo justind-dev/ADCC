@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.DirectoryServices.AccountManagement;
+﻿using System.DirectoryServices.AccountManagement;
 
 namespace ADCC;
 
@@ -38,31 +37,13 @@ public class ActiveDirectoryManager
         return _userOfInterest?.DistinguishedName;
     }
 
-    public BindingList<User> GetUserData()
-    {
-        if (_userOfInterest == null) { return null; }
-        else
-        {
-            var userList = new List<User>
-            {
-                new User(_userOfInterest.SamAccountName,
-                                _userOfInterest.Name,
-                                _userOfInterest.Surname,
-                                _userOfInterest.IsAccountLockedOut() ? "True" : "False",
-                                _userOfInterest.DistinguishedName)
-            };
-
-            var userData = new BindingList<User>(userList);
-            return userData;
-        }
-    }
     public void SetContext(PrincipalContext context)
     {
-        // _currentContext?.Dispose(); There was issues with accessing things after being disposed. Needs testing.
+        _currentContext?.Dispose();
 
         _currentContext = context;
 
-        // _userOfInterest?.Dispose(); There was issues with accessing things after being disposed. Needs testing.
+        _userOfInterest?.Dispose();
 
         _userOfInterest = null;
     }
