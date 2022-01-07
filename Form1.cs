@@ -4,15 +4,16 @@ using System.Net.NetworkInformation;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using CredentialManagement;
+using System.ComponentModel;
 
 namespace ADCC
 {
     public partial class Form1 : Form
     {
-        private readonly string connectedDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
-        private string currentDomainContextName;
-        private ActiveDirectoryManager manager;
-        private PrincipalContext adcontext;
+        private readonly string _connectedDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
+        private string _currentDomainContextName;
+        private ActiveDirectoryManager _manager;
+        private PrincipalContext _adcontext;
         public Form1()
         {
             InitializeComponent();
@@ -20,12 +21,12 @@ namespace ADCC
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            currentDomainContextName = connectedDomain.ToString();
+            _currentDomainContextName = _connectedDomain.ToString();
             GetDomainsFromSettings();
         }
         private void btn_unlock_userSAM_Click(object sender, EventArgs e)
         {
-            if (currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
+            if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
             if (textbox_userSAM.Text == "")
             {
                 MessageBox.Show("Please enter the sAMAccountName for the user to unlock them.");
@@ -33,8 +34,8 @@ namespace ADCC
             }
             else
             {
-                manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
-                if (manager.UnlockUser())
+                _manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
+                if (_manager.UnlockUser())
                 {
                     MessageBox.Show($"User {textbox_userSAM.Text} unlocked.");
                 }
@@ -46,60 +47,60 @@ namespace ADCC
 
         private void btn_FindUserDN_Click(object sender, EventArgs e)
         {
-            if (currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
-            if (textBox_userDNFind.Text == "")
+            if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
+            if (textbox_userSAM.Text == "")
             {
                 MessageBox.Show("Please enter the sAMAccountName for the user to find.");
                 return;
             }
             else
             {
-                manager.SetUserOfInterestByIdentity(textBox_userDNFind.Text);
-                var userDistinguishedName = manager.GetDistinguishedName();
+                _manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
+                var userDistinguishedName = _manager.GetDistinguishedName();
                 MessageBox.Show($"User DN is : {userDistinguishedName}");
             }
         }
 
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComboBox1.Text == null) { return; }
-            currentDomainContextName = ComboBox1.Text.ToString().ToLower().Trim();
-            if (currentDomainContextName == connectedDomain)
+            if (toolStripComboBox1.Text == null) { return; }
+            _currentDomainContextName = toolStripComboBox1.Text.ToString().ToLower().Trim();
+            if (_currentDomainContextName == _connectedDomain)
             {
-                adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName);
-                manager.SetContext(adcontext);
+                _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName);
+                _manager.SetContext(_adcontext);
             }
             else
             {
-                var cred = GetCredentialsByDomainController(currentDomainContextName);
+                var cred = GetCredentialsByDomainController(_currentDomainContextName);
                 if (cred != null)
                 {
-                    adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName, cred.Item1, cred.Item2);
-                    manager.SetContext(adcontext);
+                    _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName, cred.Item1, cred.Item2);
+                    _manager.SetContext(_adcontext);
                 }
                 else
                 {
                     MessageBox.Show("There was an error fetching credentials for the selected domain.\n" +
                                     "Please be sure that you have specified those using the Windows Credential Manager");
-                    ComboBox1.SelectedIndex = 0;
+                    toolStripComboBox1.SelectedIndex = 0;
                 }
             }
         }
 
         private void GetDomainsFromSettings()
         {
-            ComboBox1.Items.Clear();
-            ComboBox1.Items.Add(connectedDomain.ToString().Trim());
+            toolStripComboBox1.Items.Clear();
+            toolStripComboBox1.Items.Add(_connectedDomain.ToString().Trim());
             foreach (string domain in ConfigurationManager.AppSettings["domains"].Split(","))
             {
-                ComboBox1.Items.Add(domain);
+                toolStripComboBox1.Items.Add(domain);
 
             }
-            ComboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
-            currentDomainContextName = connectedDomain.ToString();
-            var adcontext = new PrincipalContext(ContextType.Domain, currentDomainContextName);
-            manager = new ActiveDirectoryManager(adcontext);
-            ComboBox1.Text = currentDomainContextName;
+            toolStripComboBox1.SelectedIndexChanged += toolStripComboBox1_SelectedIndexChanged;
+            _currentDomainContextName = _connectedDomain.ToString();
+            var adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName);
+            _manager = new ActiveDirectoryManager(adcontext);
+            toolStripComboBox1.Text = _currentDomainContextName;
 
         }
 
@@ -118,5 +119,24 @@ namespace ADCC
             }
         }
 
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            //populate grid after searching using the textbox_userSAM contents.
+            if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
+            if (textbox_userSAM.Text == "")
+            {
+                MessageBox.Show("Please enter the sAMAccountName for the user to unlock them.");
+                return;
+            }
+            else
+            {
+                _manager.SetContext(_adcontext);
+                _manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
+                var userData = _manager.GetUserData();
+                var source = new BindingSource(userData, null);
+                user_DataGridView1.DataSource = source;
+            }
+
+        }
     }
 }
