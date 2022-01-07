@@ -59,7 +59,7 @@ public class ActiveDirectoryManager
         foreach (UserPrincipal userPrincipal in allMatches)
             using (userPrincipal)
             {
-                userMatches.Add(new User(userPrincipal.SamAccountName, userPrincipal.Name, userPrincipal.Surname, userPrincipal.IsAccountLockedOut()? "True" : "False", userPrincipal.DistinguishedName));
+                userMatches.Add(new User(userPrincipal.SamAccountName, userPrincipal.GivenName, userPrincipal.Surname, userPrincipal.IsAccountLockedOut()? "True" : "False", userPrincipal.DistinguishedName));
             }
         userMatches = new BindingList<User>(userMatches.Distinct().ToList());
         return userMatches;
