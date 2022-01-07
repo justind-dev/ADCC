@@ -2,6 +2,8 @@ using System;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Configuration;
+using System.DirectoryServices.AccountManagement;
+using CredentialManagement;
 
 namespace ADCC
 {
@@ -10,7 +12,7 @@ namespace ADCC
         private readonly string connectedDomain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
         private string currentDomainContext;
         public ActiveDirectoryManager manager;
-
+        private PrincipalContext adcontext;
         public Form1()
         {
             InitializeComponent();
@@ -31,18 +33,14 @@ namespace ADCC
             }
             else
             {
-                try
+                manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
+                if (manager.UnlockUser())
                 {
-                    if (manager.UnlockUser(textbox_userSAM.Text))
-                    {
-                        MessageBox.Show($"User {textbox_userSAM.Text} unlocked.");
-                    }
-                    else { MessageBox.Show($"User {textbox_userSAM.Text} already unlocked or does not exist."); }
+                    MessageBox.Show($"User {textbox_userSAM.Text} unlocked.");
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error: {ex}");
-                }
+                else { MessageBox.Show($"User {textbox_userSAM.Text} already unlocked or does not exist."); }
+
+
             }
         }
 
@@ -56,7 +54,8 @@ namespace ADCC
             }
             else
             {
-                var userDistinguishedName = manager.GetDistinguishedName(textBox_userDNFind.Text.Trim());
+                manager.SetUserOfInterestByIdentity(textBox_userDNFind.Text);
+                var userDistinguishedName = manager.GetDistinguishedName();
                 MessageBox.Show($"User DN is : {userDistinguishedName}");
             }
         }
@@ -65,7 +64,17 @@ namespace ADCC
         {
             if (ComboBox1.Text == null) { return; }
             currentDomainContext = ComboBox1.Text.ToString().ToLower().Trim();
-            manager.SetContext(currentDomainContext);
+            if (currentDomainContext == connectedDomain)
+            {
+                adcontext = new PrincipalContext(ContextType.Domain, currentDomainContext);
+                manager.SetContext(adcontext);
+            }
+            else
+            {
+                var cred = GetCredentialsByDomainController(currentDomainContext);
+                adcontext = new PrincipalContext(ContextType.Domain, currentDomainContext, cred.Item1, cred.Item2);
+                manager.SetContext(adcontext);
+            }
         }
 
         private void GetDomainsFromSettings()
@@ -79,9 +88,25 @@ namespace ADCC
             }
             ComboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
             currentDomainContext = connectedDomain.ToString();
-            manager = new(currentDomainContext);
+            var adcontext = new PrincipalContext(ContextType.Domain, currentDomainContext);
+            manager = new ActiveDirectoryManager(adcontext);
             ComboBox1.Text = currentDomainContext;
 
+        }
+
+        public Tuple<string, string> GetCredentialsByDomainController(string DomainName)
+        {
+            using var cred = new Credential();
+            cred.Target = DomainName;
+            if (cred.Exists())
+            {
+                cred.Load();
+                return Tuple.Create(cred.Username, cred.Password);
+            }
+            else
+            {
+                return null;
+            }
         }
 
     }
