@@ -24,42 +24,6 @@ namespace ADCC
             _currentDomainContextName = _connectedDomain.ToString();
             GetDomainsFromSettings();
         }
-        private void btn_unlock_userSAM_Click(object sender, EventArgs e)
-        {
-            if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
-            if (textbox_userSAM.Text == "")
-            {
-                MessageBox.Show("Please enter the sAMAccountName for the user to unlock them.");
-                return;
-            }
-            else
-            {
-                _manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
-                if (_manager.UnlockUser())
-                {
-                    MessageBox.Show($"User {textbox_userSAM.Text} unlocked.");
-                }
-                else { MessageBox.Show($"User {textbox_userSAM.Text} already unlocked or does not exist."); }
-
-
-            }
-        }
-
-        private void btn_FindUserDN_Click(object sender, EventArgs e)
-        {
-            if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
-            if (textbox_userSAM.Text == "")
-            {
-                MessageBox.Show("Please enter the sAMAccountName for the user to find.");
-                return;
-            }
-            else
-            {
-                _manager.SetUserOfInterestByIdentity(textbox_userSAM.Text);
-                var userDistinguishedName = _manager.GetDistinguishedName();
-                MessageBox.Show($"User DN is : {userDistinguishedName}");
-            }
-        }
 
         private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
