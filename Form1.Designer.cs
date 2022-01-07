@@ -50,7 +50,6 @@
             this.toolStrip_Devices = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
             this.TabUsers.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -58,7 +57,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.user_DataGridView1)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.MainTabControl.SuspendLayout();
-            this.toolStripContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -119,7 +117,6 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.ContextMenuStrip = this.contextMenuStrip1;
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.toolStripContainer2);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.user_DataGridView1);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(876, 548);
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -234,18 +231,6 @@
             this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton3.Text = "toolStripButton3";
             // 
-            // toolStripContainer2
-            // 
-            // 
-            // toolStripContainer2.ContentPanel
-            // 
-            this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(150, 150);
-            this.toolStripContainer2.Location = new System.Drawing.Point(8, 8);
-            this.toolStripContainer2.Name = "toolStripContainer2";
-            this.toolStripContainer2.Size = new System.Drawing.Size(150, 175);
-            this.toolStripContainer2.TabIndex = 1;
-            this.toolStripContainer2.Text = "toolStripContainer2";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -268,8 +253,6 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.MainTabControl.ResumeLayout(false);
-            this.toolStripContainer2.ResumeLayout(false);
-            this.toolStripContainer2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -291,7 +274,6 @@
         private ToolStripTextBox textbox_userSAM;
         private ToolStripButton toolStripButton1;
         private TabControl MainTabControl;
-        private ToolStripContainer toolStripContainer2;
         private ToolStripLabel toolStripLabel3;
         private ToolStripTextBox toolStrip_Devices;
         private ToolStripButton toolStripButton2;
