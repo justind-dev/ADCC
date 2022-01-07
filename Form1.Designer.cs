@@ -30,7 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.MainTabControl = new System.Windows.Forms.TabControl();
+            this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.TabUsers = new System.Windows.Forms.TabPage();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.user_DataGridView1 = new System.Windows.Forms.DataGridView();
@@ -40,19 +44,14 @@
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.textbox_userSAM = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.TabComputers = new System.Windows.Forms.TabPage();
-            this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
-            this.MainTabControl.SuspendLayout();
+            this.MainTabControl = new System.Windows.Forms.TabControl();
             this.TabUsers.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.user_DataGridView1)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            this.MainTabControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -60,17 +59,41 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // MainTabControl
+            // BottomToolStripPanel
             // 
-            this.MainTabControl.ContextMenuStrip = this.contextMenuStrip1;
-            this.MainTabControl.Controls.Add(this.TabUsers);
-            this.MainTabControl.Controls.Add(this.TabComputers);
-            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainTabControl.Location = new System.Drawing.Point(0, 0);
-            this.MainTabControl.Name = "MainTabControl";
-            this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(884, 601);
-            this.MainTabControl.TabIndex = 11;
+            this.BottomToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.BottomToolStripPanel.Name = "BottomToolStripPanel";
+            this.BottomToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.BottomToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.BottomToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // TopToolStripPanel
+            // 
+            this.TopToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopToolStripPanel.Name = "TopToolStripPanel";
+            this.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.TopToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // RightToolStripPanel
+            // 
+            this.RightToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.RightToolStripPanel.Name = "RightToolStripPanel";
+            this.RightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.RightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.RightToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // LeftToolStripPanel
+            // 
+            this.LeftToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.LeftToolStripPanel.Name = "LeftToolStripPanel";
+            this.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.LeftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.LeftToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Size = new System.Drawing.Size(629, 377);
             // 
             // TabUsers
             // 
@@ -80,7 +103,7 @@
             this.TabUsers.Padding = new System.Windows.Forms.Padding(3);
             this.TabUsers.Size = new System.Drawing.Size(876, 573);
             this.TabUsers.TabIndex = 0;
-            this.TabUsers.Text = "Users";
+            this.TabUsers.Text = "Explorer";
             this.TabUsers.UseVisualStyleBackColor = true;
             // 
             // toolStripContainer1
@@ -104,6 +127,7 @@
             // user_DataGridView1
             // 
             this.user_DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.user_DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.user_DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.user_DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.user_DataGridView1.Location = new System.Drawing.Point(0, 0);
@@ -158,51 +182,16 @@
             this.toolStripButton1.Text = "toolStripButton1";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
-            // TabComputers
+            // MainTabControl
             // 
-            this.TabComputers.Location = new System.Drawing.Point(4, 24);
-            this.TabComputers.Name = "TabComputers";
-            this.TabComputers.Padding = new System.Windows.Forms.Padding(3);
-            this.TabComputers.Size = new System.Drawing.Size(876, 573);
-            this.TabComputers.TabIndex = 1;
-            this.TabComputers.Text = "Computers";
-            this.TabComputers.UseVisualStyleBackColor = true;
-            // 
-            // BottomToolStripPanel
-            // 
-            this.BottomToolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.BottomToolStripPanel.Name = "BottomToolStripPanel";
-            this.BottomToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.BottomToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.BottomToolStripPanel.Size = new System.Drawing.Size(0, 0);
-            // 
-            // TopToolStripPanel
-            // 
-            this.TopToolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.TopToolStripPanel.Name = "TopToolStripPanel";
-            this.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.TopToolStripPanel.Size = new System.Drawing.Size(0, 0);
-            // 
-            // RightToolStripPanel
-            // 
-            this.RightToolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.RightToolStripPanel.Name = "RightToolStripPanel";
-            this.RightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.RightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.RightToolStripPanel.Size = new System.Drawing.Size(0, 0);
-            // 
-            // LeftToolStripPanel
-            // 
-            this.LeftToolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.LeftToolStripPanel.Name = "LeftToolStripPanel";
-            this.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.LeftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.LeftToolStripPanel.Size = new System.Drawing.Size(0, 0);
-            // 
-            // ContentPanel
-            // 
-            this.ContentPanel.Size = new System.Drawing.Size(629, 377);
+            this.MainTabControl.ContextMenuStrip = this.contextMenuStrip1;
+            this.MainTabControl.Controls.Add(this.TabUsers);
+            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainTabControl.Location = new System.Drawing.Point(0, 0);
+            this.MainTabControl.Name = "MainTabControl";
+            this.MainTabControl.SelectedIndex = 0;
+            this.MainTabControl.Size = new System.Drawing.Size(884, 601);
+            this.MainTabControl.TabIndex = 11;
             // 
             // Form1
             // 
@@ -214,10 +203,8 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ActiveDirectory Command Center";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.MainTabControl.ResumeLayout(false);
             this.TabUsers.ResumeLayout(false);
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
@@ -227,27 +214,27 @@
             ((System.ComponentModel.ISupportInitialize)(this.user_DataGridView1)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.MainTabControl.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private ContextMenuStrip contextMenuStrip1;
-        private TabControl MainTabControl;
-        private TabPage TabUsers;
-        private TabPage TabComputers;
-        private ToolStripContainer toolStripContainer1;
-        private ToolStrip toolStrip1;
-        private ToolStripLabel toolStripLabel1;
-        private ToolStripComboBox toolStripComboBox1;
-        private ToolStripTextBox textbox_userSAM;
-        private ToolStripButton toolStripButton1;
         private ToolStripPanel BottomToolStripPanel;
         private ToolStripPanel TopToolStripPanel;
         private ToolStripPanel RightToolStripPanel;
         private ToolStripPanel LeftToolStripPanel;
         private ToolStripContentPanel ContentPanel;
+        private TabPage TabUsers;
+        private ToolStripContainer toolStripContainer1;
         private DataGridView user_DataGridView1;
+        private ToolStrip toolStrip1;
+        private ToolStripLabel toolStripLabel1;
+        private ToolStripComboBox toolStripComboBox1;
         private ToolStripLabel toolStripLabel2;
+        private ToolStripTextBox textbox_userSAM;
+        private ToolStripButton toolStripButton1;
+        private TabControl MainTabControl;
     }
 }
