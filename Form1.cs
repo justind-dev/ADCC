@@ -37,16 +37,16 @@ namespace ADCC
             else
             {
                 var cred = GetCredentialsByDomainController(_currentDomainContextName);
-                if (cred != null)
+                if (string.IsNullOrWhiteSpace(cred.Item1) | string.IsNullOrWhiteSpace(cred.Item2))
                 {
-                    _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName, cred.Item1, cred.Item2);
-                    _manager.SetContext(_adcontext);
+                    MessageBox.Show("There was an error fetching credentials for the selected domain.\n" +
+                "Please be sure that you have specified those using the Windows Credential Manager");
+                    toolStripComboBox1.SelectedIndex = 0;
                 }
                 else
                 {
-                    MessageBox.Show("There was an error fetching credentials for the selected domain.\n" +
-                                    "Please be sure that you have specified those using the Windows Credential Manager");
-                    toolStripComboBox1.SelectedIndex = 0;
+                    _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName, cred.Item1, cred.Item2);
+                    _manager.SetContext(_adcontext);
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace ADCC
             }
             else
             {
-                return null;
+                return Tuple.Create("","");
             }
         }
 
