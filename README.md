@@ -2,10 +2,10 @@
  Active Directory Command Center - Simplifying every day AD tasks.
 
 ## Features
-
-- Mutli Domain support configured via the App.Config file. 
-- User Unlocks
-- Find user distinguished name
+- Mutli Domain support configured via the App.Config file.
+- Search for users (searches both sAMAccountName and Display name for search term.
+- Unlock User
+- Reset User password
 
 
 ## How to use
@@ -23,9 +23,9 @@
 
 ## Up Coming Features
 
-- User Password Reset
-- Computer Reports (Configurable filters such as by OS, Disabled computers, etc...)
+- Clone User Account (Clone user, including permissions, group memberships, etc.)
 - User Reports (Configurable filters such as Inactive for x days, disabled users, users with passwords which dont expire, etc..)
+- Computer Reports (Configurable filters such as by OS, Disabled computers, etc...)
 - Batch user creation
 - Batch computer creation
 - and many more hopefully. I am open to suggestions so if you would like to contribute feel free to submit a PR or open an issue for the feature you would find useful.
