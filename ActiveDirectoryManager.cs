@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace ADCC;
 
@@ -34,8 +36,16 @@ public class ActiveDirectoryManager
     }
     public bool SetPassword(string password)
     {
-        _objectOfInterest?.SetPassword(password);
-        return true;
+        try
+        {
+            _objectOfInterest?.SetPassword(password);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Error, could not reset password");
+            return false;
+        }
     }
 
     public string? GetDistinguishedName()

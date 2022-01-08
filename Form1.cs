@@ -5,6 +5,7 @@ using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using CredentialManagement;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace ADCC
 {
@@ -79,7 +80,7 @@ namespace ADCC
             }
             else
             {
-                return Tuple.Create("","");
+                return Tuple.Create("", "");
             }
         }
 
@@ -89,7 +90,7 @@ namespace ADCC
             if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
             if (textbox_userSAM.Text == "")
             {
-                MessageBox.Show("Please enter the sAMAccountName for the user to unlock them.");
+                MessageBox.Show("Please enter something to search.");
                 return;
             }
             else
@@ -107,11 +108,11 @@ namespace ADCC
         {
             if (e.Button == MouseButtons.Right)
             {
-                    int rowSelected = e.RowIndex;
-                    if (e.RowIndex != -1)
-                    {
-                        this.user_DataGridView1.ClearSelection();
-                        this.user_DataGridView1.Rows[rowSelected].Selected = true;
+                int rowSelected = e.RowIndex;
+                if (e.RowIndex != -1)
+                {
+                    this.user_DataGridView1.ClearSelection();
+                    this.user_DataGridView1.Rows[rowSelected].Selected = true;
                     // you now have the selected row with the context menu showing for the user to delete etc.
                     ContextMenuStrip cm = new ContextMenuStrip();
                     this.ContextMenuStrip = cm;
@@ -123,7 +124,6 @@ namespace ADCC
 
             }
 
-            
 
         }
 
@@ -134,9 +134,26 @@ namespace ADCC
 
         private void resetPassword_Click(object? sender, EventArgs e)
         {
-            Int32 rowSelected = this.user_DataGridView1.Rows.GetFirstRow(DataGridViewElementStates.Selected);
-            MessageBox.Show($"You reset the password.\n{rowSelected}\n{e.ToString}\n" +
-                $"{user_DataGridView1.Rows[rowSelected].Cells[0]}");
+            var newPassword = "";
+            if (InputBox.Show("Reset Password", "Please enter the new password", ref newPassword) == System.Windows.Forms.DialogResult.OK)
+            {
+                var userName = this.user_DataGridView1.Rows[0].Cells[0].Value.ToString();
+                _manager.SetContext(_adcontext);
+                _manager.SetUserOfInterestByIdentity(userName);
+                if (_manager.SetPassword(newPassword))
+                {
+                    MessageBox.Show($"Password reset for {userName} successfully.");
+                }
+                else
+                {
+                    //Exception message shown via ActiveDirectorManager class.
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void unlockUser_Click(object? sender, EventArgs e)
@@ -152,7 +169,7 @@ namespace ADCC
                 MessageBox.Show($"User: {this.user_DataGridView1.Rows[0].Cells[0].Value.ToString()} is already unlocked.");
 
             }
-            
+
         }
     }
 }
