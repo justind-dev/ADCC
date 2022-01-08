@@ -4,7 +4,7 @@ using System.Net.NetworkInformation;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using CredentialManagement;
-using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace ADCC
 {
@@ -103,6 +103,56 @@ namespace ADCC
 
         }
 
-        
+        private void user_DataGridView1_CellMouseDown(Object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                    int rowSelected = e.RowIndex;
+                    if (e.RowIndex != -1)
+                    {
+                        this.user_DataGridView1.ClearSelection();
+                        this.user_DataGridView1.Rows[rowSelected].Selected = true;
+                    // you now have the selected row with the context menu showing for the user to delete etc.
+                    ContextMenuStrip cm = new ContextMenuStrip();
+                    this.ContextMenuStrip = cm;
+                    cm.Items.Add(new ToolStripMenuItem("&Unlock", null, new System.EventHandler(this.unlockUser_Click)));
+                    cm.Items.Add(new ToolStripMenuItem("&Reset Password", null, new System.EventHandler(this.resetPassword_Click)));
+                    cm.Items.Add(new ToolStripMenuItem("&Clone", null, new System.EventHandler(this.cloneUser_Click)));
+                    cm.Show(Cursor.Position);
+                }
+
+            }
+
+            
+
+        }
+
+        private void cloneUser_Click(object? sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void resetPassword_Click(object? sender, EventArgs e)
+        {
+            Int32 rowSelected = this.user_DataGridView1.Rows.GetFirstRow(DataGridViewElementStates.Selected);
+            MessageBox.Show($"You reset the password.\n{rowSelected}\n{e.ToString}\n" +
+                $"{user_DataGridView1.Rows[rowSelected].Cells[0]}");
+        }
+
+        private void unlockUser_Click(object? sender, EventArgs e)
+        {
+            _manager.SetContext(_adcontext);
+            _manager.SetUserOfInterestByIdentity(this.user_DataGridView1.Rows[0].Cells[0].Value.ToString());
+            if (_manager.UnlockUser())
+            {
+                MessageBox.Show($"User: {this.user_DataGridView1.Rows[0].Cells[0].Value.ToString()} is now unlocked");
+            }
+            else
+            {
+                MessageBox.Show($"User: {this.user_DataGridView1.Rows[0].Cells[0].Value.ToString()} is already unlocked.");
+
+            }
+            
+        }
     }
 }

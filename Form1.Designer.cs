@@ -136,8 +136,10 @@
             this.user_DataGridView1.Location = new System.Drawing.Point(0, 0);
             this.user_DataGridView1.Name = "user_DataGridView1";
             this.user_DataGridView1.RowTemplate.Height = 25;
+            this.user_DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.user_DataGridView1.Size = new System.Drawing.Size(876, 548);
             this.user_DataGridView1.TabIndex = 0;
+            this.user_DataGridView1.CellMouseDown += new DataGridViewCellMouseEventHandler(this.user_DataGridView1_CellMouseDown);
             // 
             // toolStrip1
             // 
