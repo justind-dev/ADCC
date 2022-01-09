@@ -49,7 +49,11 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.tab_UserReports = new System.Windows.Forms.TabPage();
+            this.label_UserTab_CommonReports = new System.Windows.Forms.Label();
+            this.label_InactiveUsers = new System.Windows.Forms.Label();
+            this.comboBox_InactiveUsers = new System.Windows.Forms.ComboBox();
             this.tab_DeviceReport = new System.Windows.Forms.TabPage();
+            this.tab_Settings = new System.Windows.Forms.TabPage();
             this.tab_Explorer.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -57,6 +61,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.user_DataGridView1)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.MainTabControl.SuspendLayout();
+            this.tab_UserReports.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -218,6 +223,7 @@
             this.MainTabControl.Controls.Add(this.tab_Explorer);
             this.MainTabControl.Controls.Add(this.tab_UserReports);
             this.MainTabControl.Controls.Add(this.tab_DeviceReport);
+            this.MainTabControl.Controls.Add(this.tab_Settings);
             this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainTabControl.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl.Name = "MainTabControl";
@@ -227,6 +233,9 @@
             // 
             // tab_UserReports
             // 
+            this.tab_UserReports.Controls.Add(this.label_UserTab_CommonReports);
+            this.tab_UserReports.Controls.Add(this.label_InactiveUsers);
+            this.tab_UserReports.Controls.Add(this.comboBox_InactiveUsers);
             this.tab_UserReports.Location = new System.Drawing.Point(4, 24);
             this.tab_UserReports.Name = "tab_UserReports";
             this.tab_UserReports.Padding = new System.Windows.Forms.Padding(3);
@@ -235,15 +244,63 @@
             this.tab_UserReports.Text = "User Reports";
             this.tab_UserReports.UseVisualStyleBackColor = true;
             // 
-            // tabPage1
+            // label_UserTab_CommonReports
+            // 
+            this.label_UserTab_CommonReports.AutoSize = true;
+            this.label_UserTab_CommonReports.Location = new System.Drawing.Point(13, 46);
+            this.label_UserTab_CommonReports.Name = "label_UserTab_CommonReports";
+            this.label_UserTab_CommonReports.Size = new System.Drawing.Size(101, 15);
+            this.label_UserTab_CommonReports.TabIndex = 2;
+            this.label_UserTab_CommonReports.Text = "Common Reports";
+            // 
+            // label_InactiveUsers
+            // 
+            this.label_InactiveUsers.AutoSize = true;
+            this.label_InactiveUsers.Location = new System.Drawing.Point(13, 9);
+            this.label_InactiveUsers.Name = "label_InactiveUsers";
+            this.label_InactiveUsers.Size = new System.Drawing.Size(79, 15);
+            this.label_InactiveUsers.TabIndex = 1;
+            this.label_InactiveUsers.Text = "Inactive Users";
+            // 
+            // comboBox_InactiveUsers
+            // 
+            this.comboBox_InactiveUsers.FormattingEnabled = true;
+            this.comboBox_InactiveUsers.Items.AddRange(new object[] {
+            "",
+            "Not logged in last 1 days",
+            "Not logged in last 3 days",
+            "Not logged in last 7 days",
+            "Not logged in last 14 days",
+            "Not logged in last 30 days",
+            "Not logged in last 60 days",
+            "Not logged in last 90 days",
+            "Not logged in last 180 days",
+            "Not logged in last 365 days",
+            "Not logged in ever"});
+            this.comboBox_InactiveUsers.Location = new System.Drawing.Point(98, 6);
+            this.comboBox_InactiveUsers.Name = "comboBox_InactiveUsers";
+            this.comboBox_InactiveUsers.Size = new System.Drawing.Size(168, 23);
+            this.comboBox_InactiveUsers.TabIndex = 0;
+            // 
+            // tab_DeviceReport
             // 
             this.tab_DeviceReport.Location = new System.Drawing.Point(4, 24);
-            this.tab_DeviceReport.Name = "tab_DeviceReports";
+            this.tab_DeviceReport.Name = "tab_DeviceReport";
             this.tab_DeviceReport.Padding = new System.Windows.Forms.Padding(3);
             this.tab_DeviceReport.Size = new System.Drawing.Size(876, 573);
             this.tab_DeviceReport.TabIndex = 2;
             this.tab_DeviceReport.Text = "Device Reports";
             this.tab_DeviceReport.UseVisualStyleBackColor = true;
+            // 
+            // tab_Settings
+            // 
+            this.tab_Settings.Location = new System.Drawing.Point(4, 24);
+            this.tab_Settings.Name = "tab_Settings";
+            this.tab_Settings.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_Settings.Size = new System.Drawing.Size(876, 573);
+            this.tab_Settings.TabIndex = 3;
+            this.tab_Settings.Text = "Settings";
+            this.tab_Settings.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -267,6 +324,8 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.MainTabControl.ResumeLayout(false);
+            this.tab_UserReports.ResumeLayout(false);
+            this.tab_UserReports.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -293,5 +352,9 @@
         private ToolStripButton toolStripButton2;
         private TabPage tab_UserReports;
         private TabPage tab_DeviceReport;
+        private Label label_InactiveUsers;
+        private ComboBox comboBox_InactiveUsers;
+        private TabPage tab_Settings;
+        private Label label_UserTab_CommonReports;
     }
 }
