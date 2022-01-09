@@ -35,7 +35,7 @@
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
-            this.TabUsers = new System.Windows.Forms.TabPage();
+            this.tab_Explorer = new System.Windows.Forms.TabPage();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.user_DataGridView1 = new System.Windows.Forms.DataGridView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -43,12 +43,14 @@
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.textbox_userSAM = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_SearchUsers = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStrip_Devices = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStrip_DeviceNameText = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.MainTabControl = new System.Windows.Forms.TabControl();
-            this.TabUsers.SuspendLayout();
+            this.tab_UserReports = new System.Windows.Forms.TabPage();
+            this.tab_DeviceReport = new System.Windows.Forms.TabPage();
+            this.tab_Explorer.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -98,16 +100,16 @@
             // 
             this.ContentPanel.Size = new System.Drawing.Size(629, 377);
             // 
-            // TabUsers
+            // tab_Explorer
             // 
-            this.TabUsers.Controls.Add(this.toolStripContainer1);
-            this.TabUsers.Location = new System.Drawing.Point(4, 24);
-            this.TabUsers.Name = "TabUsers";
-            this.TabUsers.Padding = new System.Windows.Forms.Padding(3);
-            this.TabUsers.Size = new System.Drawing.Size(876, 573);
-            this.TabUsers.TabIndex = 0;
-            this.TabUsers.Text = "Explorer";
-            this.TabUsers.UseVisualStyleBackColor = true;
+            this.tab_Explorer.Controls.Add(this.toolStripContainer1);
+            this.tab_Explorer.Location = new System.Drawing.Point(4, 24);
+            this.tab_Explorer.Name = "tab_Explorer";
+            this.tab_Explorer.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_Explorer.Size = new System.Drawing.Size(876, 573);
+            this.tab_Explorer.TabIndex = 0;
+            this.tab_Explorer.Text = "Explorer";
+            this.tab_Explorer.UseVisualStyleBackColor = true;
             // 
             // toolStripContainer1
             // 
@@ -139,7 +141,7 @@
             this.user_DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.user_DataGridView1.Size = new System.Drawing.Size(876, 548);
             this.user_DataGridView1.TabIndex = 0;
-            this.user_DataGridView1.CellMouseDown += new DataGridViewCellMouseEventHandler(this.user_DataGridView1_CellMouseDown);
+            this.user_DataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.user_DataGridView1_CellMouseDown);
             // 
             // toolStrip1
             // 
@@ -149,9 +151,9 @@
             this.toolStripComboBox1,
             this.toolStripLabel2,
             this.textbox_userSAM,
-            this.toolStripButton1,
+            this.toolStripButton_SearchUsers,
             this.toolStripLabel3,
-            this.toolStrip_Devices,
+            this.toolStrip_DeviceNameText,
             this.toolStripButton2});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -180,15 +182,15 @@
             this.textbox_userSAM.Name = "textbox_userSAM";
             this.textbox_userSAM.Size = new System.Drawing.Size(100, 25);
             // 
-            // toolStripButton1
+            // toolStripButton_SearchUsers
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::ADCC.Properties.Resources.magnifier;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButton_SearchUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_SearchUsers.Image = global::ADCC.Properties.Resources.magnifier;
+            this.toolStripButton_SearchUsers.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_SearchUsers.Name = "toolStripButton_SearchUsers";
+            this.toolStripButton_SearchUsers.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_SearchUsers.Text = "toolStripButton1";
+            this.toolStripButton_SearchUsers.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripLabel3
             // 
@@ -196,10 +198,10 @@
             this.toolStripLabel3.Size = new System.Drawing.Size(47, 22);
             this.toolStripLabel3.Text = "Devices";
             // 
-            // toolStrip_Devices
+            // toolStrip_DeviceNameText
             // 
-            this.toolStrip_Devices.Name = "toolStrip_Devices";
-            this.toolStrip_Devices.Size = new System.Drawing.Size(100, 25);
+            this.toolStrip_DeviceNameText.Name = "toolStrip_DeviceNameText";
+            this.toolStrip_DeviceNameText.Size = new System.Drawing.Size(100, 25);
             // 
             // toolStripButton2
             // 
@@ -213,13 +215,35 @@
             // MainTabControl
             // 
             this.MainTabControl.ContextMenuStrip = this.contextMenuStrip1;
-            this.MainTabControl.Controls.Add(this.TabUsers);
+            this.MainTabControl.Controls.Add(this.tab_Explorer);
+            this.MainTabControl.Controls.Add(this.tab_UserReports);
+            this.MainTabControl.Controls.Add(this.tab_DeviceReport);
             this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainTabControl.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
             this.MainTabControl.Size = new System.Drawing.Size(884, 601);
             this.MainTabControl.TabIndex = 11;
+            // 
+            // tab_UserReports
+            // 
+            this.tab_UserReports.Location = new System.Drawing.Point(4, 24);
+            this.tab_UserReports.Name = "tab_UserReports";
+            this.tab_UserReports.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_UserReports.Size = new System.Drawing.Size(876, 573);
+            this.tab_UserReports.TabIndex = 1;
+            this.tab_UserReports.Text = "User Reports";
+            this.tab_UserReports.UseVisualStyleBackColor = true;
+            // 
+            // tabPage1
+            // 
+            this.tab_DeviceReport.Location = new System.Drawing.Point(4, 24);
+            this.tab_DeviceReport.Name = "tab_DeviceReports";
+            this.tab_DeviceReport.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_DeviceReport.Size = new System.Drawing.Size(876, 573);
+            this.tab_DeviceReport.TabIndex = 2;
+            this.tab_DeviceReport.Text = "Device Reports";
+            this.tab_DeviceReport.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -233,7 +257,7 @@
             this.Name = "Form1";
             this.Text = "ActiveDirectory Command Center";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.TabUsers.ResumeLayout(false);
+            this.tab_Explorer.ResumeLayout(false);
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
@@ -254,7 +278,7 @@
         private ToolStripPanel RightToolStripPanel;
         private ToolStripPanel LeftToolStripPanel;
         private ToolStripContentPanel ContentPanel;
-        private TabPage TabUsers;
+        private TabPage tab_Explorer;
         private ToolStripContainer toolStripContainer1;
         private DataGridView user_DataGridView1;
         private ToolStrip toolStrip1;
@@ -262,10 +286,12 @@
         private ToolStripComboBox toolStripComboBox1;
         private ToolStripLabel toolStripLabel2;
         private ToolStripTextBox textbox_userSAM;
-        private ToolStripButton toolStripButton1;
+        private ToolStripButton toolStripButton_SearchUsers;
         private TabControl MainTabControl;
         private ToolStripLabel toolStripLabel3;
-        private ToolStripTextBox toolStrip_Devices;
+        private ToolStripTextBox toolStrip_DeviceNameText;
         private ToolStripButton toolStripButton2;
+        private TabPage tab_UserReports;
+        private TabPage tab_DeviceReport;
     }
 }
