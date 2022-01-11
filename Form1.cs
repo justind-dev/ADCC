@@ -140,6 +140,7 @@ namespace ADCC
                     this.ContextMenuStrip = cm;
                     cm.Items.Add(new ToolStripMenuItem("&Unlock", null, new System.EventHandler(this.unlockUser_Click)));
                     cm.Items.Add(new ToolStripMenuItem("&Reset Password", null, new System.EventHandler(this.resetPassword_Click)));
+                    cm.Items.Add(new ToolStripMenuItem("&Get Groups", null, new System.EventHandler(this.getGroups_Click)));
                     cm.Items.Add(new ToolStripMenuItem("&Clone", null, new System.EventHandler(this.cloneUser_Click)));
                     cm.Show(Cursor.Position);
                 }
@@ -154,6 +155,23 @@ namespace ADCC
             throw new NotImplementedException();
         }
 
+        private void getGroups_Click(object? sender, EventArgs e)
+        {
+            List<string> groupNames = new();
+            var userName = this.user_DataGridView1.Rows[0].Cells[0].Value.ToString();
+            _manager.SetContext(_adcontext);
+            _manager.SetUserOfInterestByIdentity(userName);
+            var userGroups = _manager.GetGroups(userName);
+            if (userGroups.Count > 0)
+            {
+                foreach (var group in userGroups)
+                {
+                    groupNames.Add(group.Name);
+                }
+                var message = string.Join(Environment.NewLine, groupNames);
+                MessageBox.Show(message, "USER GROUPS");
+            }
+        }
         private void resetPassword_Click(object? sender, EventArgs e)
         {
             var newPassword = "";

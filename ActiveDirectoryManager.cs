@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
@@ -50,6 +51,56 @@ public class ActiveDirectoryManager
         }
     }
 
+    //create new user
+    public bool CreateUser(string uFirstName, string uLastName, string usAMAccountName, string uPassword)
+    {
+        try
+        {
+            using (var user = new UserPrincipal(_currentContext)
+            {
+                UserPrincipalName = usAMAccountName,
+                GivenName = uFirstName,
+                Surname = uLastName,
+                Enabled = true
+            })
+            {
+                user.SetPassword(uPassword);
+                user.Save();
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "ERROR OCCURED DURING ACCOUNT CREATION");
+            return false;
+        }
+    }
+
+    //get user group memberships
+    public List<GroupPrincipal> GetGroups(string userName)
+    {
+        List<GroupPrincipal> result = new List<GroupPrincipal>();
+        try
+        {
+            PrincipalSearchResult<Principal> groups = (String.IsNullOrWhiteSpace(userName) ? _objectOfInterest.GetAuthorizationGroups() :
+                                                      //if username was passed, use that instead.
+                                                      UserPrincipal.FindByIdentity(_currentContext, userName).GetAuthorizationGroups());
+            foreach (Principal p in groups)
+            {
+                if (p is GroupPrincipal)
+                {
+                    result.Add((GroupPrincipal)p);
+                }
+            }
+            return result;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "ERROR OCCURED RETRIEVING GROUPS");
+            return result;
+        }
+    }
+
     // Search active directory, returning a list of matching users.
     public BindingList<User> QueryDirectoryUsers()
     {
@@ -85,7 +136,7 @@ public class ActiveDirectoryManager
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 directoryEntry = new(adPath);
-                
+
             }
             else
             {
@@ -131,10 +182,10 @@ public class ActiveDirectoryManager
                         string deviceDescription = Convert.ToBoolean(result.Properties["description"].Count > 0) ? result.Properties["description"][0].ToString() : "";
                         string deviceOS = Convert.ToBoolean(result.Properties["operatingSystem"].Count > 0) ? result.Properties["operatingSystem"][0].ToString() : "";
                         string deviceLastLogon = Convert.ToBoolean(result.Properties["lastLogonTimestamp"].Count > 0) ? result.Properties["lastLogonTimestamp"][0].ToString() : "";
-                        
+
                         //Conver ADSI timestamp (deviceLastLogon) to human readable
                         string deviceLastLogonTime = DateTime.FromFileTime(Int64.Parse(deviceLastLogon)).ToString();
-                        
+
                         string deviceDistinguishedName = Convert.ToBoolean(result.Properties["distinguishedName"].Count > 0) ? result.Properties["distinguishedName"][0].ToString() : "";
                         // Add to the device matches list
                         deviceMatches.Add(new Device(deviceName,
