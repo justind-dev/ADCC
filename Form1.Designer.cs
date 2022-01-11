@@ -42,11 +42,11 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-            this.textbox_userSAM = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton_SearchUsers = new System.Windows.Forms.ToolStripButton();
+            this.textbox_UserName = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButton_UserSearch = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStrip_DeviceNameText = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.textBox_DeviceName = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButton_DeviceSearch = new System.Windows.Forms.ToolStripButton();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.tab_UserReports = new System.Windows.Forms.TabPage();
             this.label_UserTab_CommonReports = new System.Windows.Forms.Label();
@@ -155,14 +155,14 @@
             this.toolStripLabel1,
             this.toolStripComboBox1,
             this.toolStripLabel2,
-            this.textbox_userSAM,
-            this.toolStripButton_SearchUsers,
+            this.textbox_UserName,
+            this.toolStripButton_UserSearch,
             this.toolStripLabel3,
-            this.toolStrip_DeviceNameText,
-            this.toolStripButton2});
+            this.textBox_DeviceName,
+            this.toolStripButton_DeviceSearch});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(511, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(542, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -182,20 +182,21 @@
             this.toolStripLabel2.Size = new System.Drawing.Size(30, 22);
             this.toolStripLabel2.Text = "User";
             // 
-            // textbox_userSAM
+            // textbox_UserName
             // 
-            this.textbox_userSAM.Name = "textbox_userSAM";
-            this.textbox_userSAM.Size = new System.Drawing.Size(100, 25);
+            this.textbox_UserName.Name = "textbox_UserName";
+            this.textbox_UserName.Size = new System.Drawing.Size(100, 25);
             // 
-            // toolStripButton_SearchUsers
+            // toolStripButton_UserSearch
             // 
-            this.toolStripButton_SearchUsers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_SearchUsers.Image = global::ADCC.Properties.Resources.magnifier;
-            this.toolStripButton_SearchUsers.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_SearchUsers.Name = "toolStripButton_SearchUsers";
-            this.toolStripButton_SearchUsers.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_SearchUsers.Text = "toolStripButton1";
-            this.toolStripButton_SearchUsers.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButton_UserSearch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_UserSearch.Image = global::ADCC.Properties.Resources.magnifier;
+            this.toolStripButton_UserSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_UserSearch.Name = "toolStripButton_UserSearch";
+            this.toolStripButton_UserSearch.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_UserSearch.Text = "toolStripButton_UserSearch";
+            this.toolStripButton_UserSearch.ToolTipText = "Search Users";
+            this.toolStripButton_UserSearch.Click += new System.EventHandler(this.toolStripButton_UserSearch_Click);
             // 
             // toolStripLabel3
             // 
@@ -203,19 +204,22 @@
             this.toolStripLabel3.Size = new System.Drawing.Size(47, 22);
             this.toolStripLabel3.Text = "Devices";
             // 
-            // toolStrip_DeviceNameText
+            // textBox_DeviceName
             // 
-            this.toolStrip_DeviceNameText.Name = "toolStrip_DeviceNameText";
-            this.toolStrip_DeviceNameText.Size = new System.Drawing.Size(100, 25);
+            this.textBox_DeviceName.Name = "textBox_DeviceName";
+            this.textBox_DeviceName.Size = new System.Drawing.Size(100, 25);
             // 
-            // toolStripButton2
+            // toolStripButton_DeviceSearch
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::ADCC.Properties.Resources.magnifier;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton_DeviceSearch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_DeviceSearch.Image = global::ADCC.Properties.Resources.magnifier;
+            this.toolStripButton_DeviceSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_DeviceSearch.Name = "toolStripButton_DeviceSearch";
+            this.toolStripButton_DeviceSearch.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_DeviceSearch.Text = "toolStripButtonDeviceSearch";
+            this.toolStripButton_DeviceSearch.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
+            this.toolStripButton_DeviceSearch.ToolTipText = "Search Devices";
+            this.toolStripButton_DeviceSearch.Click += new System.EventHandler(this.toolStripButton_DeviceSearch_Click);
             // 
             // MainTabControl
             // 
@@ -344,12 +348,12 @@
         private ToolStripLabel toolStripLabel1;
         private ToolStripComboBox toolStripComboBox1;
         private ToolStripLabel toolStripLabel2;
-        private ToolStripTextBox textbox_userSAM;
-        private ToolStripButton toolStripButton_SearchUsers;
+        private ToolStripTextBox textbox_UserName;
+        private ToolStripButton toolStripButton_UserSearch;
         private TabControl MainTabControl;
         private ToolStripLabel toolStripLabel3;
-        private ToolStripTextBox toolStrip_DeviceNameText;
-        private ToolStripButton toolStripButton2;
+        private ToolStripTextBox textBox_DeviceName;
+        private ToolStripButton toolStripButton_DeviceSearch;
         private TabPage tab_UserReports;
         private TabPage tab_DeviceReport;
         private Label label_InactiveUsers;

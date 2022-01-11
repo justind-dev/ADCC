@@ -6,6 +6,7 @@ using System.DirectoryServices.AccountManagement;
 using CredentialManagement;
 using System.Windows.Forms;
 using System.Drawing;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace ADCC
 {
@@ -15,6 +16,7 @@ namespace ADCC
         private string _currentDomainContextName;
         private ActiveDirectoryManager _manager;
         private PrincipalContext _adcontext;
+
         public Form1()
         {
             InitializeComponent();
@@ -84,11 +86,10 @@ namespace ADCC
             }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void toolStripButton_UserSearch_Click(object sender, EventArgs e)
         {
-            //populate grid after searching using the textbox_userSAM contents.
             if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
-            if (textbox_userSAM.Text == "")
+            if (textbox_UserName.Text == "")
             {
                 MessageBox.Show("Please enter something to search.");
                 return;
@@ -96,10 +97,31 @@ namespace ADCC
             else
             {
                 _manager.SetContext(_adcontext);
-                _manager.SetObjectOfInterestSearchTerm(textbox_userSAM.Text);
-                var userData = _manager.QueryDirectory();
-                var source = new BindingSource(userData, null);
+                _manager.SetObjectOfInterestSearchTerm(textbox_UserName.Text);
+                var searchData = _manager.QueryDirectoryUsers();
+                var source = new BindingSource(searchData, null);
                 user_DataGridView1.DataSource = source;
+            }
+
+        }
+
+        private void toolStripButton_DeviceSearch_Click(object sender, EventArgs e)
+        {
+            if (_currentDomainContextName == null) { MessageBox.Show("Please select a domain."); return; }
+            if (textBox_DeviceName.Text == "")
+            {
+                MessageBox.Show("Please enter something to search.");
+                return;
+            }
+            else
+            {
+                _manager.SetContext(_adcontext);
+                _manager.SetObjectOfInterestSearchTerm(textBox_DeviceName.Text);
+                var cred = GetCredentialsByDomainController(_currentDomainContextName);
+                var searchData = _manager.QueryDirectoryDevices(cred.Item1, cred.Item2);
+                var source = new BindingSource(searchData, null);
+                user_DataGridView1.DataSource = source;
+
             }
 
         }

@@ -2,6 +2,7 @@
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
+using System.Net;
 
 namespace ADCC;
 
@@ -9,12 +10,13 @@ public class ActiveDirectoryManager
 {
     private PrincipalContext? _currentContext;
     private UserPrincipal? _objectOfInterest;
-    private string? _objectName;
+    public string? _objectName;
 
     public ActiveDirectoryManager(PrincipalContext context)
     {
         _currentContext = context;
         _objectOfInterest = null;
+        _objectName = null;
     }
     //set current user of interest by idenitity
     public void SetUserOfInterestByIdentity(string identityName)
@@ -23,7 +25,7 @@ public class ActiveDirectoryManager
         _objectOfInterest?.Dispose();
         _objectOfInterest = UserPrincipal.FindByIdentity(_currentContext, identityName);
     }
-    // Set search term for query methods
+    //// Set search term for query methods
     public void SetObjectOfInterestSearchTerm(string searchCriteria)
     {
         _objectName = searchCriteria;
@@ -43,18 +45,13 @@ public class ActiveDirectoryManager
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Error, could not reset password");
+            MessageBox.Show(ex.Message, "ERROR OCCURED DURING PASSWORD RESET");
             return false;
         }
     }
 
-    public string? GetDistinguishedName()
-    {
-        return _objectOfInterest?.DistinguishedName;
-    }
-
     // Search active directory, returning a list of matching users.
-    public BindingList<User> QueryDirectory()
+    public BindingList<User> QueryDirectoryUsers()
     {
         var userMatches = new BindingList<User>();
         var searchString = String.Format("*{0}*", _objectName);
@@ -73,17 +70,98 @@ public class ActiveDirectoryManager
             }
         userMatches = new BindingList<User>(userMatches.Distinct().ToList());
         return userMatches;
+
     }
 
+    // Search active directory, returning a list of matching computer objects
+    // This one works a little differntly in that it uses a directory entry instead of a PrincipalContext
+    public BindingList<Device> QueryDirectoryDevices(string username, string password)
+    {
+        var deviceMatches = new BindingList<Device>();
+        string adPath = @"LDAP://" + _currentContext.Name;
+        DirectoryEntry directoryEntry;
+        try
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                directoryEntry = new(adPath);
+                
+            }
+            else
+            {
+                directoryEntry = new(adPath);
+                directoryEntry.Username = username;
+                directoryEntry.Password = password;
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "ERROR OCCURED CONNECTING TO DIRECTORY");
+            return null;
+        }
+
+        string searchFilter = "(&(objectCategory=computer)(name=*" + _objectName + "*))";
+        DirectorySearcher searcher = new DirectorySearcher(directoryEntry, searchFilter);
+        String[] propertiesToLoad = new string[] { "name", "dNSHostName", "description", "operatingSystem", "lastLogonTimestamp", "distinguishedName" };
+        foreach (string property in propertiesToLoad)
+        {
+            searcher.PropertiesToLoad.Add(property);
+        }
+        try
+        {
+            SearchResultCollection DirectorySearchResults = searcher.FindAll();
+
+            if (DirectorySearchResults == null)
+            {
+                return null;
+            }
+            else
+            {
+                foreach (SearchResult result in DirectorySearchResults)
+                {
+                    if (String.IsNullOrEmpty(result.Properties["name"][0].ToString()))
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        //Check that values exist, if they do set the variable to the value or set it to "" if not.
+                        string deviceName = Convert.ToBoolean(result.Properties["name"].Count > 0) ? result.Properties["name"][0].ToString() : "";
+                        string deviceDNSName = Convert.ToBoolean(result.Properties["dNSHostName"].Count > 0) ? result.Properties["dNSHostName"][0].ToString() : "";
+                        string deviceDescription = Convert.ToBoolean(result.Properties["description"].Count > 0) ? result.Properties["description"][0].ToString() : "";
+                        string deviceOS = Convert.ToBoolean(result.Properties["operatingSystem"].Count > 0) ? result.Properties["operatingSystem"][0].ToString() : "";
+                        string deviceLastLogon = Convert.ToBoolean(result.Properties["lastLogonTimestamp"].Count > 0) ? result.Properties["lastLogonTimestamp"][0].ToString() : "";
+                        
+                        //Conver ADSI timestamp (deviceLastLogon) to human readable
+                        string deviceLastLogonTime = DateTime.FromFileTime(Int64.Parse(deviceLastLogon)).ToString();
+                        
+                        string deviceDistinguishedName = Convert.ToBoolean(result.Properties["distinguishedName"].Count > 0) ? result.Properties["distinguishedName"][0].ToString() : "";
+                        // Add to the device matches list
+                        deviceMatches.Add(new Device(deviceName,
+                                                     deviceDNSName,
+                                                     deviceDescription,
+                                                     deviceOS,
+                                                     deviceLastLogonTime,
+                                                     deviceDistinguishedName));
+
+                    }
+                }
+
+                deviceMatches = new BindingList<Device>(deviceMatches.Distinct().ToList());
+                return deviceMatches;
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "ERROR OCCURED SEARCHING DIRECTORY");
+            return null;
+        }
+    }
 
     public void SetContext(PrincipalContext context)
     {
-        // _currentContext?.Dispose(); There was issues with accessing things after being disposed. Needs testing.
-
         _currentContext = context;
-
-        // _userOfInterest?.Dispose(); There was issues with accessing things after being disposed. Needs testing.
-
         _objectOfInterest = null;
+        _objectName = null;
     }
 }
