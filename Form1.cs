@@ -45,6 +45,8 @@ namespace ADCC
                     MessageBox.Show("There was an error fetching credentials for the selected domain.\n" +
                 "Please be sure that you have specified those using the Windows Credential Manager");
                     toolStripComboBox1.SelectedIndex = 0;
+                    this.user_DataGridView1.ClearSelection();
+                    this.user_DataGridView1.DataSource = null;
                 }
                 else
                 {
@@ -152,16 +154,47 @@ namespace ADCC
 
         private void cloneUser_Click(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //get the username
+                var userName = this.user_DataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+
+                //Parse the OU so that newly created user will be in the same organizational unit
+                List<string> ouData = this.user_DataGridView1.SelectedRows[0].Cells[4].Value.ToString().Split(",").ToList();
+                ouData.RemoveAt(0);
+                string userOU = string.Join(",", ouData);
+
+                //Get the groups of the selected user which the new user will be apart of.
+                _manager.SetUserOfInterestByIdentity(userName);
+                var userGroups = _manager.GetUserGroupMemberships(null);
+
+                //set the OU for the context to match current user
+                SetContextContainer(userOU);
+
+                //pass it into the manager
+                _manager.SetContext(_adcontext);
+
+
+                //This will be replaced with a dialog box accepting the following.
+                _manager.CreateUser("testUserFirst5", "testUserLast5", "testuser005", "SecureOne!@", userOU);
+                SetContextContainer("");
+                _manager.SetUserOfInterestByIdentity("testuser005");
+                _manager.AddUserToGroups(userGroups, "testuser005");
+                MessageBox.Show($"User: {userName} successfully cloned to testuser005");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR OCCURED CLONING USER");
+            }
         }
 
         private void getGroups_Click(object? sender, EventArgs e)
         {
             List<string> groupNames = new();
-            var userName = this.user_DataGridView1.Rows[0].Cells[0].Value.ToString();
+            var userName = this.user_DataGridView1.SelectedRows[0].Cells[0].Value.ToString();
             _manager.SetContext(_adcontext);
             _manager.SetUserOfInterestByIdentity(userName);
-            var userGroups = _manager.GetGroups(userName);
+            var userGroups = _manager.GetUserGroupMemberships(userName);
             if (userGroups.Count > 0)
             {
                 foreach (var group in userGroups)
@@ -177,7 +210,7 @@ namespace ADCC
             var newPassword = "";
             if (InputBox.Show("Reset Password", "Please enter the new password", ref newPassword) == System.Windows.Forms.DialogResult.OK)
             {
-                var userName = this.user_DataGridView1.Rows[0].Cells[0].Value.ToString();
+                var userName = this.user_DataGridView1.SelectedRows[0].Cells[0].Value.ToString();
                 _manager.SetContext(_adcontext);
                 _manager.SetUserOfInterestByIdentity(userName);
                 if (_manager.SetPassword(newPassword))
@@ -210,6 +243,56 @@ namespace ADCC
 
             }
 
+        }
+
+        private void SetContextContainer(string container)
+        {
+            if (_currentDomainContextName == _connectedDomain)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(container))
+                    {
+                        _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName);
+                    }
+                    else
+                    {
+                        _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName, container);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "ERROR COULD NOT SET CONTEXT");
+                }
+            }
+            else
+            {
+                var cred = GetCredentialsByDomainController(_currentDomainContextName);
+                if (string.IsNullOrWhiteSpace(cred.Item1) | string.IsNullOrWhiteSpace(cred.Item2))
+                {
+                    MessageBox.Show("There was an error setting setting the location to the new OU.\n" +
+                "Please be sure that the OU exists and you are still authenticated to Active Directory");
+                    this.user_DataGridView1.DataSource = null;
+                }
+                else
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(container))
+                        {
+                            _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName, cred.Item1, cred.Item2);
+                        }
+                        else
+                        {
+                            _adcontext = new PrincipalContext(ContextType.Domain, _currentDomainContextName, container, cred.Item1, cred.Item2);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "ERROR COULD NOT SET CONTEXT");
+                    }
+                }
+            }
         }
     }
 }

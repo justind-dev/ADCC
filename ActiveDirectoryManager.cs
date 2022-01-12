@@ -24,19 +24,32 @@ public class ActiveDirectoryManager
     {
         _objectName = identityName;
         _objectOfInterest?.Dispose();
-        _objectOfInterest = UserPrincipal.FindByIdentity(_currentContext, identityName);
+        try
+        {
+            _objectOfInterest = UserPrincipal.FindByIdentity(_currentContext, identityName);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "ERROR SETTING USER OF INTEREST");
+            _objectName = null;
+            _objectOfInterest = null;
+        }
     }
     //// Set search term for query methods
     public void SetObjectOfInterestSearchTerm(string searchCriteria)
     {
         _objectName = searchCriteria;
     }
+
+    // unlock current user of interest account
     public bool UnlockUser()
     {
         if (_objectOfInterest == null || !_objectOfInterest.IsAccountLockedOut()) return false;
         _objectOfInterest.UnlockAccount();
         return true;
     }
+
+    // set current object of interest password
     public bool SetPassword(string password)
     {
         try
@@ -51,16 +64,33 @@ public class ActiveDirectoryManager
         }
     }
 
+    public string GetOrganizationUnityForUser(string userName)
+    {
+        string ou;
+        if (string.IsNullOrEmpty(userName))
+        {
+            ou = "";
+            return ou;
+        }
+        ou = "";
+        return ou;
+    }
     //create new user
-    public bool CreateUser(string uFirstName, string uLastName, string usAMAccountName, string uPassword)
+    public bool CreateUser(string uFirstName, string uLastName, string usAMAccountName, string uPassword, string uOULocation)
     {
         try
         {
+            _currentContext = new PrincipalContext(ContextType.Domain, _currentContext.Name, uOULocation);
+
             using (var user = new UserPrincipal(_currentContext)
             {
-                UserPrincipalName = usAMAccountName,
                 GivenName = uFirstName,
                 Surname = uLastName,
+                DisplayName = uFirstName + " " + uLastName,
+                Name = uFirstName + " " + uLastName,
+                SamAccountName = usAMAccountName,
+                UserPrincipalName = usAMAccountName + "@" + _currentContext.Name,
+                PasswordNotRequired = false,
                 Enabled = true
             })
             {
@@ -77,7 +107,7 @@ public class ActiveDirectoryManager
     }
 
     //get user group memberships
-    public List<GroupPrincipal> GetGroups(string userName)
+    public List<GroupPrincipal> GetUserGroupMemberships(string userName)
     {
         List<GroupPrincipal> result = new List<GroupPrincipal>();
         try
@@ -100,6 +130,41 @@ public class ActiveDirectoryManager
             return result;
         }
     }
+    //get user group memberships -- NOT WORKING CURRENTLY
+    public void AddUserToGroups(List<GroupPrincipal> userGroups, string userName)
+    {
+        try
+        {
+            SetUserOfInterestByIdentity(userName);
+
+            if (userGroups.Count > 0)
+            {
+                foreach (GroupPrincipal group in userGroups)
+                {
+                    var members = group.GetMembers();
+                    var gp = GroupPrincipal.FindByIdentity(_currentContext,group.Name);
+                    if (members.Contains(_objectOfInterest))
+                    {
+                        gp.Dispose();
+                        continue;
+                    }
+                    else
+                    {
+                        gp.Members.Add(_currentContext, IdentityType.SamAccountName, _objectOfInterest.SamAccountName.ToString());
+                        gp.Save();
+                        gp.Dispose();
+                    }
+
+
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "ERROR OCCURED ADDING USER TO GROUPS");
+        }
+
+    }
 
     // Search active directory, returning a list of matching users.
     public BindingList<User> QueryDirectoryUsers()
@@ -112,14 +177,15 @@ public class ActiveDirectoryManager
         var searcherUsername = new PrincipalSearcher(searchMaskUsername);
         PrincipalSearchResult<Principal> taskDisplayName = searcherDisplayname.FindAll();
         PrincipalSearchResult<Principal> taskUsername = searcherUsername.FindAll();
-        var allMatches = taskDisplayName.Union(taskUsername);
+        var allMatches = (taskDisplayName.Union(taskUsername)).Distinct();
 
         foreach (UserPrincipal userPrincipal in allMatches)
             using (userPrincipal)
             {
                 userMatches.Add(new User(userPrincipal.SamAccountName, userPrincipal.GivenName, userPrincipal.Surname, userPrincipal.IsAccountLockedOut() ? "True" : "False", userPrincipal.DistinguishedName));
             }
-        userMatches = new BindingList<User>(userMatches.Distinct().ToList());
+
+        userMatches = new BindingList<User>(userMatches.ToList());
         return userMatches;
 
     }
