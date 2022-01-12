@@ -6,6 +6,7 @@
 - Search for users (searches both sAMAccountName and Display name for search term.
 - Unlock User
 - Reset User password
+- Device search by device name
 
 
 ## How to use
@@ -26,6 +27,7 @@
 - Clone User Account (Clone user, including permissions, group memberships, etc.)
 - User Reports (Configurable filters such as Inactive for x days, disabled users, users with passwords which dont expire, etc..)
 - Computer Reports (Configurable filters such as by OS, Disabled computers, etc...)
+- Device search interaction (right-click for IP Address, remote desktop, remote PSSession, etc..)
 - Batch user creation
 - Batch computer creation
 - and many more hopefully. I am open to suggestions so if you would like to contribute feel free to submit a PR or open an issue for the feature you would find useful.
